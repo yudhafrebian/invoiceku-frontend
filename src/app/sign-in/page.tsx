@@ -3,10 +3,15 @@ import Navbar from "@/components/core/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/schemas/auth-schema";
+import { apiCall } from "@/utils/apiHelper";
 import { Formik, Form, FormikProps } from "formik";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useAppDispatch } from "../hook";
+import { toast } from "sonner";
+import { setLogin } from "@/utils/redux/features/authSlice";
+import { useRouter } from "next/navigation";
 
 interface IFormValue {
   email: string;
@@ -15,6 +20,36 @@ interface IFormValue {
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  const onSubmit = async (values: IFormValue) => {
+    const response = await apiCall.post("/auth/signin", {
+      email: values.email,
+      password: values.password,
+    });
+
+    console.log(response);
+
+    toast.success("Login Success", {
+      description: `Welcome ${response.data.data.first_name}`,
+    })
+    dispatch(
+      setLogin({
+        first_name: response.data.data.first_name,
+        last_name: response.data.data.last_name,
+        email: response.data.data.email,
+        phone: response.data.data.phone,
+        profile_img: response.data.data.profile_img,
+        is_verified: response.data.data.is_verified,
+        token: response.data.data.token
+      })
+    )
+
+    window.localStorage.setItem("token", response.data.data.token)
+    router.replace("/dashboard")
+  };
   return (
     <>
       <div className="h-screen bg-[#fafafa]">
@@ -35,6 +70,7 @@ const SignIn = () => {
               validationSchema={signInSchema}
               onSubmit={(values: IFormValue) => {
                 console.log(values);
+                onSubmit(values);
               }}
             >
               {(props: FormikProps<IFormValue>) => {
@@ -91,7 +127,7 @@ const SignIn = () => {
                       </div>
                     </div>
                     <Link href="/sign-up">
-                      <p className="text-sm text-muted-foreground text-right">
+                      <p className="text-sm text-muted-foreground hover:text-primary hover:underline text-right">
                         Forgot Password
                       </p>
                     </Link>

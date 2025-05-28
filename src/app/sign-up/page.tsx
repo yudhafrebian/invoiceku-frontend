@@ -17,6 +17,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowRightCircle, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { apiCall } from "@/utils/apiHelper";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface IFormValue {
   first_name: string;
@@ -30,6 +33,29 @@ interface IFormValue {
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
+
+  const onSubmit = async (values: IFormValue) => {
+    try {
+      const response = await apiCall.post("/auth/signup", {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        email: values.email,
+        phone: values.phone,
+        password: values.password,
+      });
+
+      console.log(response);
+
+      toast.success("Registration Success", {
+        description: "Please check your email to verify your account",
+      });
+
+      router.push("/sign-in");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="h-screen bg-[#fafafa]">
       <Navbar />
@@ -91,6 +117,7 @@ const SignUp = () => {
             validationSchema={signUpSchema}
             onSubmit={(values: IFormValue) => {
               console.log(values);
+              onSubmit(values);
             }}
           >
             {(props: FormikProps<IFormValue>) => {
