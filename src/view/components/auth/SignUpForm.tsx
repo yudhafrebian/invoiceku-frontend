@@ -22,90 +22,43 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 interface IFormValue {
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone?: string;
-  password: string;
-  confirm_password: string;
-}
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone?: string;
+    password: string;
+    confirm_password: string;
+  }
 
-const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const router = useRouter();
+  const SignUpForm = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const router = useRouter();
 
-  const onSubmit = async (values: IFormValue) => {
-    try {
-      const response = await apiCall.post("/auth/signup", {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        email: values.email,
-        phone: values.phone,
-        password: values.password,
-      });
+    const onSubmit = async (values: IFormValue) => {
+        try {
+          const response = await apiCall.post("/auth/signup", {
+            first_name: values.first_name,
+            last_name: values.last_name,
+            email: values.email,
+            phone: values.phone,
+            password: values.password,
+          });
+    
+          console.log(response);
+    
+          toast.success("Registration Success", {
+            description: "Please check your email to verify your account",
+          });
+    
+          router.push("/sign-in");
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-      console.log(response);
-
-      toast.success("Registration Success", {
-        description: "Please check your email to verify your account",
-      });
-
-      router.push("/sign-in");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  return (
-    <div className="h-screen bg-[#fafafa]">
-      <Navbar />
-      <div className="bg-white w-2/3 h-[35em] m-auto mt-16 rounded-2xl shadow-lg flex gap-4 p-4 text-primary">
-        <div className="relative h-full w-1/2 bg-[#fafafa] rounded-2xl p-8 ">
-          <Carousel
-            opts={{ loop: true, align: "start" }}
-            plugins={[Autoplay({ delay: 5000 })]}
-          >
-            <CarouselContent>
-              <CarouselItem className="flex flex-col justify-center gap-4">
-                <Image
-                  src={"undraw_receipt_tzi0.svg"}
-                  width={400}
-                  height={400}
-                  alt=""
-                />
-                <div className="text-2xl font-semibold text-center">
-                  <p>Create your own receipt</p>
-                  <p>Easy, fast and secure</p>
-                </div>
-              </CarouselItem>
-              <CarouselItem className="flex flex-col justify-center gap-12">
-                <Image src={"payment.svg"} width={400} height={400} alt="" />
-                <div className="text-2xl font-semibold text-center">
-                  <p>Easy Payment</p>
-                  <p>Pay Anywhere With Ease</p>
-                </div>
-              </CarouselItem>
-              <CarouselItem className="flex flex-col justify-center gap-12">
-                <Image src={"secure.svg"} width={400} height={400} alt="" />
-                <div className="text-2xl font-semibold text-center">
-                  <p>100% Secure</p>
-                  <p>Your Data Is Safe With Us</p>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-          </Carousel>
-        </div>
-        <div className="w-1/2 px-8">
-          <div className="flex flex-col gap-2 mb-8">
-            <h1 className="text-4xl font-semibold">Create an account</h1>
-            <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link className="underline hover:text-blue-700" href="/sign-in">
-                Sign In
-              </Link>
-            </p>
-          </div>
-          <Formik
+    return(
+        <Formik
             initialValues={{
               first_name: "",
               last_name: "",
@@ -247,22 +200,8 @@ const SignUp = () => {
               );
             }}
           </Formik>
-          <div className="mt-4">
-            <p className="text-sm text-muted-foreground">
-              By signing up, you agree to our{" "}
-              <Link className="underline hover:text-blue-700" href="/">
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link className="underline hover:text-blue-700" href="/">
-                Privacy Policy
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default SignUp;
+    )
+  };
+  
+  export default SignUpForm;
+  

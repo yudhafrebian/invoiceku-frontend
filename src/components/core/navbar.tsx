@@ -13,10 +13,10 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
         </Link>
       </div>
       <div className="flex gap-3">
-        <Link href={"/sign-in"}>
+        <Link href={"/auth/sign-in"}>
           <Button variant={"ghost"}>Sign In</Button>
         </Link>
-        <Link href={"/sign-up"}>
+        <Link href={"/auth/sign-up"}>
           <Button>Sign Up</Button>
         </Link>
       </div>

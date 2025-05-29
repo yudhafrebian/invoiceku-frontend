@@ -127,7 +127,7 @@ export function AppSidebar() {
                     onClick={() => {
                       dispatch(setLogout());
                       window.localStorage.removeItem("token");
-                      router.replace("/sign-in");
+                      router.replace("/auth/sign-in");
                     }}
                     variant={"destructive"}
                   >
