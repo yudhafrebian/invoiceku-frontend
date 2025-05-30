@@ -1,9 +1,16 @@
+"use client";
 import Navbar from "@/components/core/navbar";
 import ResetPasswordForm from "@/view/components/auth/ResetPasswordForm";
+import { redirect, useSearchParams } from "next/navigation";
 
 const ResetPasswordPage = () => {
+  const queryParams = useSearchParams()
+  const token = queryParams.get("tkn");
+  if(!token){
+    redirect("/unauthorized");
+  }
   return (
-<>
+    <>
       <div className="h-screen bg-[#fafafa]">
         <Navbar />
         <div className="bg-white w-[90%] md:w-1/3 m-auto mt-24 rounded-2xl shadow-lg gap-4 p-4 pb-8 text-primary">
@@ -17,7 +24,7 @@ const ResetPasswordPage = () => {
         </div>
       </div>
     </>
-  )
+  );
 };
 
 export default ResetPasswordPage;

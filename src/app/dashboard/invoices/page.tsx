@@ -1,3 +1,5 @@
+"use client";
+import { withAuth } from '@/hoc/withAuth';
 import * as React from 'react';
 
 interface IInvoiceProps {
@@ -11,4 +13,4 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
   )
 };
 
-export default Invoices;
+export default withAuth(Invoices);

@@ -5,6 +5,7 @@ import { apiCall } from "@/utils/apiHelper";
 import { useRouter } from "next/navigation";
 import { setLogin } from "@/utils/redux/features/authSlice";
 import { set } from "date-fns";
+import { withAuth } from "@/hoc/withAuth";
 
 interface IDashboardProps {}
 
@@ -59,4 +60,4 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
   );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard);

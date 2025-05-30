@@ -1,3 +1,5 @@
+"use client";
+import { withAuth } from '@/hoc/withAuth';
 import * as React from 'react';
 
 interface IClientsProps {
@@ -11,4 +13,4 @@ const Clients: React.FunctionComponent<IClientsProps> = (props) => {
   )
 };
 
-export default Clients;
+export default withAuth(Clients);

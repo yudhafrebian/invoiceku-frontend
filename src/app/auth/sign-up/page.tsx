@@ -1,9 +1,19 @@
+"use client";
 import Navbar from "@/components/core/navbar";
 import Link from "next/link";
 import SignUpForm from "@/view/components/auth/SignUpForm";
 import SignUpCarousel from "@/view/components/auth/SignUpCarousel";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const SignUp = () => {
+    const router = useRouter();
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        router.replace("/dashboard");
+      }
+    }, []);
   return (
     <div className="h-screen bg-[#fafafa] ">
       <Navbar />

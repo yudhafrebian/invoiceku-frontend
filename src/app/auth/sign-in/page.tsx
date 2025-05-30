@@ -1,8 +1,18 @@
+"use client";
 import Navbar from "@/components/core/navbar";
 import Link from "next/link";
 import SignInForm from "@/view/components/auth/SignInForm";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const SignIn = () => {
+  const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.replace("/dashboard");
+    }
+  }, []);
   return (
     <>
       <div className="h-screen bg-[#fafafa]">
@@ -15,7 +25,7 @@ const SignIn = () => {
             </p>
           </div>
 
-         <SignInForm />
+          <SignInForm />
 
           <div className="flex justify-center gap-6 ">
             <Link href="/">

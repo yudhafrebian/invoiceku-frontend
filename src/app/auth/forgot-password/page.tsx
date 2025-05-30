@@ -1,7 +1,17 @@
+"use client";
 import Navbar from "@/components/core/navbar";
 import ForgotPasswordForm from "@/view/components/auth/ForgotPasswordForm";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const ForgotPasswordPage = () => {
+    const router = useRouter();
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        router.replace("/dashboard");
+      }
+    }, []);
   return (
     <>
       <div className="h-screen bg-[#fafafa]">

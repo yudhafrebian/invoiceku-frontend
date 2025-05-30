@@ -1,25 +1,26 @@
 "use client";
 
 import {
-  Calendar,
-  Home,
-  Inbox,
-  Search,
   Settings,
   LayoutDashboard,
   Users,
   Boxes,
   ReceiptText,
   LogOut,
-  ChevronUp,
   User2,
+  ChevronsUpDown,
+  Verified,
+  CalendarSync,
 } from "lucide-react";
+import {useMediaQuery} from "@react-hookz/web"
 
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 
 import {
@@ -28,7 +29,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -39,13 +40,14 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hook";
 import { setLogout } from "@/utils/redux/features/authSlice";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const items = [
   {
@@ -69,31 +71,33 @@ const items = [
     icon: ReceiptText,
   },
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Reccuring Invoices",
+    url: "/dashboard/reccuring-invoices",
+    icon: CalendarSync,
   },
 ];
 
 export function AppSidebar() {
-  const [open, setOpen] = useState(false);
+  const [openSignOut, setOpenSignOut] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const user = useAppSelector((state) => {
     return state.authState;
   });
+  const pathname = usePathname();
+  const isMobile = useMediaQuery("(max-width: 639px)");
 
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="bg-white">
         <SidebarGroup>
-          <SidebarGroupLabel>InvoiceKu</SidebarGroupLabel>
+          <SidebarHeader></SidebarHeader>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url} className="font-semibold">
+                  <SidebarMenuButton asChild isActive={pathname === item.url}>
+                    <a href={item.url} className={pathname === item.url ? "font-semibold" : ""}>
                       <item.icon />
                       <span>{item.title}</span>
                     </a>
@@ -107,13 +111,74 @@ export function AppSidebar() {
       <SidebarFooter className="bg-white">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="cursor-pointer text-destructive">
-              <a onClick={() => setOpen(true)} className="font-semibold">
-                <LogOut />
-                <span>Sign Out</span>
-              </a>
-            </SidebarMenuButton>
-            <Dialog open={open} onOpenChange={setOpen}>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <SidebarMenuButton
+                  asChild
+                  className="cursor-pointer py-6 w-60"
+                >
+                  <div>
+                    <Image
+                      src={user.profile_img || "/user.png"}
+                      alt="logo"
+                      width={32}
+                      height={32}
+                    />
+                    <div className="flex justify-between items-center w-full">
+                      <div className="flex flex-col">
+                        <span>{`${user.first_name} ${user.last_name}`}</span>
+                        <span className="text-xs font-light">{user.email}</span>
+                      </div>
+                      <ChevronsUpDown size={16} />
+                    </div>
+                  </div>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side={isMobile ? "top" : "right"} align="start" className="p-2 w-72 bg-[#fafafa]">
+                <DropdownMenuGroup>
+                  <div className="flex items-center gap-2 py-1">
+                    <Avatar>
+                      <AvatarImage
+                        src={user.profile_img || "/user.png"}
+                        alt="logo"
+                      />
+                      <AvatarFallback>{user.first_name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <p>{`${user.first_name} ${user.last_name}`}</p>
+                      <p className="text-xs font-light">{user.email}</p>
+                    </div>
+                  </div>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <User2 size={16} />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Verified size={16} />
+                    <span>Account</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Settings size={16} />
+                    <span>Setting</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer text-destructive">
+                  <LogOut size={16} className="text-destructive" />
+                  <span
+                    onClick={() => setOpenSignOut(true)}
+                    className="cursor-pointer"
+                  >
+                    Sign Out
+                  </span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Dialog open={openSignOut} onOpenChange={setOpenSignOut}>
               <DialogContent>
                 <DialogHeader className="text-left">
                   <DialogTitle>Sign Out</DialogTitle>
@@ -132,7 +197,10 @@ export function AppSidebar() {
                   >
                     Sign Out
                   </Button>
-                  <Button onClick={() => setOpen(false)} variant={"outline"}>
+                  <Button
+                    onClick={() => setOpenSignOut(false)}
+                    variant={"outline"}
+                  >
                     Cancel
                   </Button>
                 </div>

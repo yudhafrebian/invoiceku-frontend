@@ -9,32 +9,32 @@ import {
 
 const SignUpCarousel = () => {
   return (
-    <div className="relative hidden md:block h-full w-1/2 bg-[#fafafa] rounded-2xl p-8 ">
+    <div className="relative hidden md:block h-full w-1/2 bg-[#fafafa] rounded-2xl p-4 ">
     <Carousel
       opts={{ loop: true, align: "start" }}
       plugins={[Autoplay({ delay: 5000 })]}
     >
       <CarouselContent>
-        <CarouselItem className="flex flex-col justify-center gap-4">
+        <CarouselItem className="flex flex-col justify-center">
           <Image
-            src={"../undraw_receipt_tzi0.svg"}
+            src={"../invoice.svg"}
             width={400}
             height={400}
             alt=""
           />
           <div className="text-2xl font-semibold text-center">
-            <p>Create your own receipt</p>
+            <p>Create your own invoice</p>
             <p>Easy, fast and secure</p>
           </div>
         </CarouselItem>
-        <CarouselItem className="flex flex-col justify-center gap-12">
+        <CarouselItem className="flex flex-col justify-center ">
           <Image src={"../payment.svg"} width={400} height={400} alt="" />
           <div className="text-2xl font-semibold text-center">
             <p>Easy Payment</p>
             <p>Pay Anywhere With Ease</p>
           </div>
         </CarouselItem>
-        <CarouselItem className="flex flex-col justify-center gap-12">
+        <CarouselItem className="flex flex-col justify-center">
           <Image src={"../secure.svg"} width={400} height={400} alt="" />
           <div className="text-2xl font-semibold text-center">
             <p>100% Secure</p>

@@ -20,7 +20,7 @@ const ResetPasswordSuccessPage: React.FunctionComponent<IResetPasswordSuccessPag
             </p>
           </div>
           <div className="relative w-48 h-48 m-auto">
-            <Image src={"../../success_verify.svg"} alt="verify" fill />
+            <Image src={"../../verified.svg"} alt="verify" fill />
           </div>
           <div className="text-center mt-4">
             <p className="text-sm text-muted-foreground mb-2">Go back to Sign In Page</p>
