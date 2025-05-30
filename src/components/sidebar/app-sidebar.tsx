@@ -46,7 +46,6 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hook";
 import { setLogout } from "@/utils/redux/features/authSlice";
 import { useRouter } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const items = [
   {
@@ -116,7 +115,7 @@ export function AppSidebar() {
             </SidebarMenuButton>
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogContent>
-                <DialogHeader>
+                <DialogHeader className="text-left">
                   <DialogTitle>Sign Out</DialogTitle>
                   <DialogDescription>
                     Are you sure you want to Sign Out?

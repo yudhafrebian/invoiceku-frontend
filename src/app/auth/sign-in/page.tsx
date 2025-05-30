@@ -7,7 +7,7 @@ const SignIn = () => {
     <>
       <div className="h-screen bg-[#fafafa]">
         <Navbar />
-        <div className="bg-white w-1/3 h-[27em] m-auto mt-24 rounded-2xl shadow-lg gap-4 p-4 text-primary">
+        <div className="bg-white w-[90%] md:w-1/3 h-[27em] m-auto mt-24 rounded-2xl shadow-lg gap-4 p-2 py-4 md:p-4 text-primary">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-semibold mb-2">Sign In</h1>
             <p className="text-sm text-muted-foreground">

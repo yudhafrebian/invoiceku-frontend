@@ -51,7 +51,7 @@ interface IFormValue {
             description: "Please check your email to verify your account",
           });
     
-          router.push("/sign-in");
+          router.push("/auth/sign-in");
         } catch (error) {
           console.log(error);
         }
@@ -78,7 +78,7 @@ interface IFormValue {
               console.log(errors);
               return (
                 <Form className="flex flex-col gap-4">
-                  <div className="flex justify-between">
+                  <div className="flex gap-4 md:gap-0 justify-between">
                     <div>
                       <Input
                         name="first_name"

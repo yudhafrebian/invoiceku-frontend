@@ -9,7 +9,7 @@ import {
 
 const SignUpCarousel = () => {
   return (
-    <div className="relative h-full w-1/2 bg-[#fafafa] rounded-2xl p-8 ">
+    <div className="relative hidden md:block h-full w-1/2 bg-[#fafafa] rounded-2xl p-8 ">
     <Carousel
       opts={{ loop: true, align: "start" }}
       plugins={[Autoplay({ delay: 5000 })]}

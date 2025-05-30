@@ -19,19 +19,27 @@ interface IFormValue {
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
+  const [errMessage, setErrMessage] = useState("");
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const onSubmit = async (values: IFormValue) => {
-    const response = await apiCall.post("/auth/signin", values);
+    try {
+      const response = await apiCall.post("/auth/signin", values);
 
-    toast.success("Login Success", {
-      description: `Welcome ${response.data.data.first_name}`,
-    });
+      toast.success("Login Success", {
+        description: `Welcome ${response.data.data.first_name}`,
+      });
 
-    dispatch(setLogin(response.data.data));
-    window.localStorage.setItem("token", response.data.data.token);
-    router.replace("/dashboard");
+      dispatch(setLogin(response.data.data));
+      window.localStorage.setItem("token", response.data.data.token);
+      router.replace("/dashboard");
+    } catch (error: any) {
+      console.log(error);
+      setError(true);
+      setErrMessage(error.response.data.error);
+    }
   };
 
   return (
@@ -43,7 +51,7 @@ export default function SignInForm() {
       {(props: FormikProps<IFormValue>) => {
         const { errors, touched, handleBlur, handleChange } = props;
         return (
-          <Form className="flex flex-col gap-2 px-8 h-[17em]">
+          <Form className="flex flex-col gap-2 px-4 md:px-8 h-[17em]">
             <div className="flex flex-col gap-4">
               <div>
                 <Input
@@ -52,11 +60,15 @@ export default function SignInForm() {
                   placeholder="Email"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  className={errors.email && touched.email ? "border-red-500" : ""}
+                  className={
+                    errors.email && touched.email || error ? "border-red-500" : ""
+                  }
                 />
-                {errors.email && touched.email && (
+                {errors.email && touched.email ? (
                   <p className="text-xs text-red-500 mt-1">{errors.email}</p>
-                )}
+                ) : error ? (
+                  <p className="text-xs text-red-500 mt-1">{errMessage}</p>
+                ) : null}
               </div>
               <div>
                 <div className="flex gap-2">
@@ -66,15 +78,24 @@ export default function SignInForm() {
                     placeholder="Password"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    className={errors.password && touched.password ? "border-red-500" : ""}
+                    className={
+                      errors.password && touched.password || error
+                        ? "border-red-500"
+                        : ""
+                    }
                   />
-                  <Button type="button" onClick={() => setShowPassword(!showPassword)}>
+                  <Button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
                     {showPassword ? <Eye /> : <EyeOff />}
                   </Button>
                 </div>
-                {errors.password && touched.password && (
+                {errors.password && touched.password ? (
                   <p className="text-xs text-red-500 mt-1">{errors.password}</p>
-                )}
+                ) : error ? (
+                  <p className="text-xs text-red-500 mt-1">{errMessage}</p>
+                ) : null}
               </div>
             </div>
             <Link href="/auth/forgot-password">
@@ -82,11 +103,18 @@ export default function SignInForm() {
                 Forgot Password
               </p>
             </Link>
-            <Button type="submit" className="mt-2">Sign In</Button>
+            <Button type="submit" className="mt-2">
+              Sign In
+            </Button>
             <div>
               <p className="text-sm text-muted-foreground text-center">
                 Don't have an account?{" "}
-                <Link href="/auth/sign-up" className="text-muted-foreground hover:text-primary underline">Sign Up</Link>
+                <Link
+                  href="/auth/sign-up"
+                  className="text-muted-foreground hover:text-primary underline"
+                >
+                  Sign Up
+                </Link>
               </p>
             </div>
           </Form>
