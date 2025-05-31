@@ -12,7 +12,7 @@ import {
   Verified,
   CalendarSync,
 } from "lucide-react";
-import {useMediaQuery} from "@react-hookz/web"
+import { useMediaQuery } from "@react-hookz/web";
 
 import {
   DropdownMenu,
@@ -48,6 +48,7 @@ import { setLogout } from "@/utils/redux/features/authSlice";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import Link from "next/link";
 
 const items = [
   {
@@ -97,7 +98,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <a href={item.url} className={pathname === item.url ? "font-semibold" : ""}>
+                    <a
+                      href={item.url}
+                      className={pathname === item.url ? "font-semibold" : ""}
+                    >
                       <item.icon />
                       <span>{item.title}</span>
                     </a>
@@ -113,10 +117,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <SidebarMenuButton
-                  asChild
-                  className="cursor-pointer py-6 w-60"
-                >
+                <SidebarMenuButton asChild className="cursor-pointer py-6 w-60">
                   <div>
                     <Image
                       src={user.profile_img || "/user.png"}
@@ -134,7 +135,11 @@ export function AppSidebar() {
                   </div>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent side={isMobile ? "top" : "right"} align="start" className="p-2 w-72 bg-[#fafafa]">
+              <DropdownMenuContent
+                side={isMobile ? "top" : "right"}
+                align="start"
+                className="p-2 w-72 bg-[#fafafa]"
+              >
                 <DropdownMenuGroup>
                   <div className="flex items-center gap-2 py-1">
                     <Avatar>
@@ -152,10 +157,12 @@ export function AppSidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem className="cursor-pointer">
-                    <User2 size={16} />
-                    <span>Profile</span>
-                  </DropdownMenuItem>
+                  <Link href="/dashboard/user/profile">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <User2 size={16} />
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem className="cursor-pointer">
                     <Verified size={16} />
                     <span>Account</span>

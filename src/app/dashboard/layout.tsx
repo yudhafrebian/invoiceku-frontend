@@ -14,10 +14,8 @@ export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main>
-        <div>
-          <SidebarTrigger className="cursor-pointer" />
-        </div>
+      <main className="w-full">
+        <SidebarTrigger className="cursor-pointer" />
         {children}
       </main>
     </SidebarProvider>
