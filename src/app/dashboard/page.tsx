@@ -53,7 +53,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
     keepLogin();
   }, []);
   return (
-    <div className="p-8 bg-[#FAFAFA]">
+    <div className="p-10 bg-[#FAFAFA]">
       <h1>Dashboard</h1>
       <h1>welcome {user.first_name}</h1>
     </div>
