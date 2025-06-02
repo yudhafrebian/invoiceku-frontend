@@ -25,7 +25,6 @@ const TypeSelector: React.FunctionComponent<ITypeSelectorProps> = ({
     try {
       const response = await apiCall.get("/product/type-product");
       setTypes(response.data.data);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

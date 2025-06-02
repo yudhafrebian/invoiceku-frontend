@@ -15,64 +15,53 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { apiCall } from "@/utils/apiHelper";
+import EditClientForm from "@/view/components/client/editClientForm";
 import EditProductForm from "@/view/components/product/editProductForm";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export type Product = {
+export type Client = {
   id: string;
   name: string;
-  description: string;
-  price: number;
-  unit: string;
+  email: string;
+  phone: number;
+  address: string;
 };
 
 export const columns = (
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>
-): ColumnDef<Product>[] => [
+): ColumnDef<Client>[] => [
   {
     accessorKey: "name",
     header: "Name",
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "email",
+    header: "Email",
   },
   {
-    accessorKey: "price",
-    header: "Price",
-    cell: ({ row }) => {
-      const product = row.original;
-      return product.price.toLocaleString("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-      });
-    },
+    accessorKey: "phone",
+    header: "Phone",
   },
   {
-    accessorKey: "type",
-    header: "Type",
-  },
-  {
-    accessorKey: "unit",
-    header: "Unit",
+    accessorKey: "address",
+    header: "Address",
   },
   {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const product = row.original;
+      const  client = row.original;
       const [open, setOpen] = useState(false);
       const [openDialog, setOpenDialog] = useState(false);
 
-      const deleteProduct = async () => {
+      const deleteClient = async () => {
         const token = localStorage.getItem("token");
         try {
           const response = await apiCall.patch(
-            `/product/delete-product/${product.id}`,
+            `/client/delete-client/${client.id}`,
             null,
             {
               headers: {
@@ -81,7 +70,7 @@ export const columns = (
             }
           );
 
-          toast.success("Product Deleted", {
+          toast.success("Client Deleted", {
             description: response.data.message,
           });
 
@@ -113,9 +102,9 @@ export const columns = (
                   Update Your Product Or Service
                 </DialogDescription>
               </DialogHeader>
-              <EditProductForm
+              <EditClientForm
                 onClose={() => setOpen(false)}
-                params={{ id: product.id }}
+                params={{ id: client.id }}
                 onSuccess={() => setRefresh((prev) => !prev)}
               />
             </DialogContent>
@@ -135,12 +124,12 @@ export const columns = (
             </Tooltip>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Delete Product Or Service</DialogTitle>
+                <DialogTitle>Delete Client</DialogTitle>
                 <DialogDescription>
-                  Are you sure you want to delete {product.name}?
+                  Are you sure you want to delete {client.name}?
                 </DialogDescription>
                 <div className="flex justify-end gap-2">
-                  <Button variant={"destructive"} onClick={deleteProduct}>
+                  <Button variant={"destructive"} onClick={deleteClient}>
                     Delete
                   </Button>
                   <Button

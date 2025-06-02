@@ -69,7 +69,7 @@ const Products = () => {
         </Dialog>
       </div>
       <div>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns(setRefresh)} data={data} />
       </div>
     </div>
   );
