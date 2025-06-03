@@ -28,6 +28,7 @@ export type Client = {
   email: string;
   phone: number;
   address: string;
+  payment_ref: string;
 };
 
 export const columns = (
@@ -50,10 +51,25 @@ export const columns = (
     header: "Address",
   },
   {
+    accessorKey: "payment_ref",
+    header: "Payment Ref",
+    cell: ({ row }) => {
+      const formatPaymentMethod = (method: string) => {
+        if(method === "QRIS") return "QRIS";
+        return method
+          .toLowerCase()
+          .split("_")
+          .map((word) => word[0].toUpperCase() + word.slice(1))
+          .join(" ");
+      };
+      return formatPaymentMethod(row.getValue("payment_ref"));
+    },
+  },
+  {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const  client = row.original;
+      const client = row.original;
       const [open, setOpen] = useState(false);
       const [openDialog, setOpenDialog] = useState(false);
 

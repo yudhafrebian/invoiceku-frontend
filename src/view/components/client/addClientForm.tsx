@@ -1,3 +1,4 @@
+import PaymentMethodSelector from "@/components/selector/PaymentMethodSelector";
 import TypeSelector from "@/components/selector/TypeSelector";
 import UnitSelector from "@/components/selector/UnitSeletor";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ interface IFormValue {
   email: string;
   phone: string;
   address: string;
+  payment_ref: string;
 }
 
 interface IAddProductFormProps {
@@ -36,6 +38,7 @@ const AddClientForm: React.FunctionComponent<IAddProductFormProps> = ({
           email: values.email,
           phone: `62${values.phone}`,
           address: values.address,
+          payment_ref: values.payment_ref,
         },
         {
           headers: {
@@ -61,6 +64,7 @@ const AddClientForm: React.FunctionComponent<IAddProductFormProps> = ({
         email: "",
         phone: "",
         address: "",
+        payment_ref: "",
       }}
       validationSchema={clientSchema}
       onSubmit={(values: IFormValue, { resetForm }) => {
@@ -130,6 +134,11 @@ const AddClientForm: React.FunctionComponent<IAddProductFormProps> = ({
                 {errors.phone && touched.phone && (
                   <p className="text-xs text-red-500 mt-1">{errors.phone}</p>
                 )}
+              </div>
+              <div>
+                <Label htmlFor="payment_ref">Payment Reference</Label>
+                <PaymentMethodSelector name="payment_ref" />
+
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="address">Address</Label>

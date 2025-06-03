@@ -5,4 +5,5 @@ export const clientSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     phone: Yup.number().required("Phone number is required"),
     address: Yup.string().required("Address is required"),
+    payment_ref: Yup.string().required("Payment reference is required"),
 });
