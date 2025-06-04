@@ -20,6 +20,7 @@ const TypeSelector: React.FunctionComponent<ITypeSelectorProps> = ({
   const [field, meta, helper] = useField(name);
   const [open, setOpen] = useState<boolean>(false);
   const [types, setTypes] = useState<string[]>([]);
+  console.log(field.value);
 
   const getType = async () => {
     try {

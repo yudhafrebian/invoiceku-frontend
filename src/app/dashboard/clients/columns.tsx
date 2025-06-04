@@ -113,9 +113,9 @@ export const columns = (
             </Tooltip>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Edit Product Or Service</DialogTitle>
+                <DialogTitle>Edit Client</DialogTitle>
                 <DialogDescription>
-                  Update Your Product Or Service
+                  Update Your Client Information
                 </DialogDescription>
               </DialogHeader>
               <EditClientForm

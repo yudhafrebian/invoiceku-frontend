@@ -21,7 +21,7 @@ const PaymentMethodSelector: React.FunctionComponent<IPaymentMethodProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [methods, setMethods] = useState<string[]>([]);
 
-  const getType = async () => {
+  const getPaymentMethod = async () => {
     try {
       const response = await apiCall.get("/client/payment-method");
       setMethods(response.data.data);
@@ -41,7 +41,7 @@ const PaymentMethodSelector: React.FunctionComponent<IPaymentMethodProps> = ({
 
 
   useEffect(() => {
-    getType();
+    getPaymentMethod();
   }, []);
   return (
     <Popover

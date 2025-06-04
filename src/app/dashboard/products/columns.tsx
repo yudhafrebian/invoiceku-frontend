@@ -110,7 +110,7 @@ export const columns = (
               <DialogHeader>
                 <DialogTitle>Edit Product Or Service</DialogTitle>
                 <DialogDescription>
-                  Update Your Product Or Service
+                  Update Your Product Or Service Details
                 </DialogDescription>
               </DialogHeader>
               <EditProductForm

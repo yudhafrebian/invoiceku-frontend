@@ -135,10 +135,9 @@ const AddClientForm: React.FunctionComponent<IAddProductFormProps> = ({
                   <p className="text-xs text-red-500 mt-1">{errors.phone}</p>
                 )}
               </div>
-              <div>
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="payment_ref">Payment Reference</Label>
                 <PaymentMethodSelector name="payment_ref" />
-
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="address">Address</Label>

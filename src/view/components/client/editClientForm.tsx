@@ -11,12 +11,14 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ClientFormSkeleton from "./clientFormSkeleton";
 import { clientSchema } from "@/schemas/client-schma";
+import PaymentMethodSelector from "@/components/selector/PaymentMethodSelector";
 
 interface IFormValue {
   name: string;
   email: string;
   phone: string;
   address: string;
+  payment_ref: string;
 }
 
 interface IEditClienttFormProps {
@@ -43,6 +45,7 @@ const EditClientForm: React.FunctionComponent<IEditClienttFormProps> = ({
           },
         }
       );
+      console.log(response.data.data.client);
         setData(response.data.data.client);
     } catch (error) {
       console.log(error);
@@ -59,6 +62,7 @@ const EditClientForm: React.FunctionComponent<IEditClienttFormProps> = ({
           email: values.email,
           phone: values.phone,
           address: values.address,
+          payment_ref: values.payment_ref,
         },
         {
           headers: {
@@ -89,6 +93,7 @@ const EditClientForm: React.FunctionComponent<IEditClienttFormProps> = ({
         email: data.email || "",
         phone: data.phone || "",
         address: data.address || "",
+        payment_ref: data.payment_ref || "",
       }}
       validationSchema={clientSchema}
       onSubmit={(values: IFormValue) => {
@@ -162,6 +167,10 @@ const EditClientForm: React.FunctionComponent<IEditClienttFormProps> = ({
                 )}
               </div>
             </div>
+            <div className="flex flex-col gap-2">
+                <Label htmlFor="payment_ref">Payment Reference</Label>
+                <PaymentMethodSelector name="payment_ref" />
+              </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="address">Address</Label>
               <div>
