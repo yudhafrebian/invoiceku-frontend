@@ -60,4 +60,4 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
   );
 };
 
-export default withAuth(Dashboard);
+export default Dashboard;

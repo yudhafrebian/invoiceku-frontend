@@ -45,4 +45,4 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
   );
 };
 
-export default withAuth(Invoices);
+export default Invoices;

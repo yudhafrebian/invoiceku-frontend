@@ -2,6 +2,7 @@
 import Navbar from "@/components/core/navbar";
 import ResetPasswordForm from "@/view/components/auth/ResetPasswordForm";
 import { redirect, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 const ResetPasswordPage = () => {
   const queryParams = useSearchParams()
@@ -10,7 +11,7 @@ const ResetPasswordPage = () => {
     redirect("/unauthorized");
   }
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <div className="h-screen bg-[#fafafa]">
         <Navbar />
         <div className="bg-white w-[90%] md:w-1/3 m-auto mt-24 rounded-2xl shadow-lg gap-4 p-4 pb-8 text-primary">
@@ -23,7 +24,7 @@ const ResetPasswordPage = () => {
           <ResetPasswordForm />
         </div>
       </div>
-    </>
+    </Suspense>
   );
 };
 
