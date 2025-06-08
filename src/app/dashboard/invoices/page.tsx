@@ -4,6 +4,8 @@ import * as React from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { apiCall } from "@/utils/apiHelper";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface IInvoiceProps {}
 
@@ -20,8 +22,19 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
         },
       });
 
-      console.log(response.data.data);
-      setData(response.data.data);
+      const formattedData = response.data.data.map((invoice: any) => ({
+        id: invoice.id,
+        client: invoice.clients?.name || "Unknown",
+        invoice_number: invoice.invoice_number,
+        start_date: new Date(invoice.start_date).toLocaleDateString(),
+        due_date: new Date(invoice.due_date).toLocaleDateString(),
+        total: invoice.total,
+        payment_method: invoice.payment_method,
+        status: invoice.status,
+      }));
+
+
+      setData(formattedData);
     } catch (error) {
       console.log(error);
     }
@@ -40,9 +53,14 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
           Here you can manage your invoices
         </p>
       </div>
+      <div className="flex justify-end">
+        <Link href={"/dashboard/invoices/create-invoice"}>
+        <Button type="button">Create Invoice</Button>
+        </Link>
+      </div>
       <DataTable columns={columns(setRefresh)} data={data} />
     </div>
   );
 };
 
-export default Invoices;
+export default withAuth(Invoices);

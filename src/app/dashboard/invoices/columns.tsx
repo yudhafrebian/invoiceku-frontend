@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,6 +25,7 @@ import { toast } from "sonner";
 export type Invoice = {
   id: string;
   client: string;
+  invoice_number: string;
   start_date: Date;
   due_date: Date;
   total: number;
@@ -34,6 +36,10 @@ export type Invoice = {
 export const columns = (
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>
 ): ColumnDef<Invoice>[] => [
+  {
+    accessorKey: "invoice_number",
+    header: "Invoice Number",
+  },
   {
     accessorKey: "client",
     header: "Client",
@@ -49,6 +55,14 @@ export const columns = (
   {
     accessorKey: "total",
     header: "Total",
+    cell: ({row}) => {
+      const price = row.original
+      return price.total.toLocaleString("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      });
+    },
   },
   {
     accessorKey: "payment_method",
@@ -68,6 +82,18 @@ export const columns = (
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status = row.original;
+      return (
+        status.status === "Pending" ? (
+          <Badge variant="outline" className="text-orange-400 border-orange-400">Pending</Badge>
+        ) : status.status === "Overdue" ? (
+          <Badge variant="destructive">Overdue</Badge>
+        ) : (
+          <Badge className="text-green-400 border-green-400">Paid</Badge>
+        )
+      )
+    }
   },
   // {
   //   id: "actions",

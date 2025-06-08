@@ -228,4 +228,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default withAuth(Clients);

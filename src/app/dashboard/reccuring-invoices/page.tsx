@@ -13,4 +13,4 @@ const ReccuringInvoicePage: React.FunctionComponent<IReccuringInvoicePageProps> 
   )
 };
 
-export default ReccuringInvoicePage;
+export default withAuth(ReccuringInvoicePage);
