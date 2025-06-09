@@ -84,7 +84,7 @@ const CreateInvoiceForm = () => {
           handleBlur,
           setFieldValue,
         } = props;
-        
+
         useEffect(() => {
           const totalAmount = values.invoice_items.reduce(
             (acc, item) => acc + item.price_snapshot * item.quantity,
@@ -146,7 +146,8 @@ const CreateInvoiceForm = () => {
                     className={
                       touched.invoice_number && errors.invoice_number
                         ? "border-red-500"
-                        : ""}
+                        : ""
+                    }
                   />
                   {touched.invoice_number && errors.invoice_number && (
                     <p className="text-red-500 text-xs">
@@ -242,11 +243,12 @@ const CreateInvoiceForm = () => {
                         Add Item
                       </Button>
                     </div>
-                    {touched.invoice_items && errors.invoice_items && (
-                      <p className="text-red-500 text-xs">
-                        {errors.invoice_items as string}
-                      </p>
-                    )}
+                    {touched.invoice_items &&
+                      typeof errors.invoice_items === "string" && (
+                        <p className="text-red-500 text-xs">
+                          {errors.invoice_items}
+                        </p>
+                      )}
                   </div>
                 )}
               </FieldArray>
@@ -289,7 +291,9 @@ const CreateInvoiceForm = () => {
             <div className="flex gap-4 justify-end">
               <Button type="submit">Save Invoice</Button>
               <Link href="/dashboard/invoices">
-                <Button variant={"destructive"} type="button">Cancel</Button>
+                <Button variant={"destructive"} type="button">
+                  Cancel
+                </Button>
               </Link>
             </div>
           </Form>

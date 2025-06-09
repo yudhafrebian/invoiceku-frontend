@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { LogOut, Settings, User2, Verified } from "lucide-react";
+import { LogOut, Settings, User2, Verified, Wallet } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -54,12 +54,21 @@ const DashboardNavbar: React.FunctionComponent<IDashboardNavbarProps> = (
               <User2 /> Profile
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <Verified /> Account
-          </DropdownMenuItem>
+          <Link href={"/dashboard/user/account"}>
+            <DropdownMenuItem>
+              <Verified /> Account
+            </DropdownMenuItem>
+          </Link>
+          <Link href={"/dashboard/user/payment-method"}>
+            <DropdownMenuItem>
+              <Wallet /> Payment Method
+            </DropdownMenuItem>
+          </Link>
+          <Link href={"/dashboard/user/setting"}>
           <DropdownMenuItem>
             <Settings /> Settings
           </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => setOpenSignOut(true)}>

@@ -7,9 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../../components/ui/card";
-import { Formik } from "formik";
-import { profileSchema } from "@/schemas/user-schema";
-import { withAuth } from "@/hoc/withAuth";
 import ProfileForm from "@/view/components/user/profileForm";
 
 const ProfilePage= () => {

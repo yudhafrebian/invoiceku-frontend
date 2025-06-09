@@ -21,7 +21,7 @@ interface Product {
   description: string;
   type: string;
   unit: string;
-  price: string;
+  price: number;
 }
 
 const ProductSelector: React.FunctionComponent<IProductSelectorProps> = ({
@@ -93,7 +93,7 @@ const ProductSelector: React.FunctionComponent<IProductSelectorProps> = ({
                       setOpen(false);
                       setFieldValue(`invoice_items.${productIndex}.name_snapshot`, product.name);
                       setFieldValue(`invoice_items.${productIndex}.description`, product.description);
-                      setFieldValue(`invoice_items.${productIndex}.price_snapshot`, parseFloat(product.price));
+                      setFieldValue(`invoice_items.${productIndex}.price_snapshot`, product.price);
                     }}
                   >
                     {product.name}
