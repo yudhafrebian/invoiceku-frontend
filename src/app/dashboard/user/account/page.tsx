@@ -1,3 +1,5 @@
+"use client";
+import { withAuth } from '@/hoc/withAuth';
 import * as React from 'react';
 
 interface IAccountPageProps {
@@ -11,4 +13,4 @@ const AccountPage: React.FunctionComponent<IAccountPageProps> = (props) => {
   )
 };
 
-export default AccountPage;
+export default withAuth(AccountPage);

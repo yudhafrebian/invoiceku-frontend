@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "../../../../components/ui/card";
 import ProfileForm from "@/view/components/user/profileForm";
+import { withAuth } from "@/hoc/withAuth";
 
 const ProfilePage= () => {
   return (
@@ -25,4 +26,4 @@ const ProfilePage= () => {
   );
 };
 
-export default ProfilePage;
+export default withAuth(ProfilePage);

@@ -1,5 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -9,9 +16,13 @@ import {
 } from "@/components/ui/tooltip";
 import { apiCall } from "@/utils/apiHelper";
 import { Edit, Landmark } from "lucide-react";
+import Image from "next/image";
 import * as React from "react";
+import EditPaymentMethodForm from "./EditPaymentMethod";
 
-interface IPaymentMethodListProps {}
+interface IPaymentMethodListProps {
+  refresh: boolean;
+}
 
 interface IPaymentMethod {
   id: number;
@@ -21,12 +32,14 @@ interface IPaymentMethod {
   qris_image_url: string;
 }
 
-const PaymentMethodList: React.FunctionComponent<IPaymentMethodListProps> = (
-  props
-) => {
+const PaymentMethodList: React.FunctionComponent<IPaymentMethodListProps> = ({
+  refresh,
+}) => {
   const [paymentMethod, setPaymentMethod] = React.useState<IPaymentMethod[]>(
     []
   );
+  const [internalRefresh, setInternalRefresh] = React.useState<boolean>(false);
+  const [editId, setEditId] = React.useState<number | null>(null);
 
   const formatMethod = (method: string) => {
     if (method === "Qris") return "QRIS";
@@ -76,8 +89,38 @@ const PaymentMethodList: React.FunctionComponent<IPaymentMethodListProps> = (
       return (
         <div key={method.id} className="flex items-center gap-2">
           <div className="flex justify-between w-full p-2 border rounded-lg">
-            <div className="flex gap-2">
-              <Landmark className="text-blue-800" />
+            <div className="flex items-center gap-2">
+              {method.payment_method === "Bank_Transfer" ? (
+                <Landmark className="text-blue-800 w-8 h-8" />
+              ) : method.payment_method === "Dana" ? (
+                <Image
+                  src={"../../dana.svg"}
+                  width={32}
+                  height={32}
+                  alt={"Dana"}
+                />
+              ) : method.payment_method === "Gopay" ? (
+                <Image
+                  src={"../../gopay.svg"}
+                  width={32}
+                  height={32}
+                  alt={"Gopay"}
+                />
+              ) : method.payment_method === "Shopeepay" ? (
+                <Image
+                  src={"../../shopeepay.svg"}
+                  width={32}
+                  height={32}
+                  alt={"Shopeepay"}
+                />
+              ) : (
+                <Image
+                  src={"../../qris.svg"}
+                  width={32}
+                  height={32}
+                  alt={"OVO"}
+                />
+              )}
               <p>{formatMethod(method.payment_method)}</p>
             </div>
             <div className="flex items-center gap-2">
@@ -93,16 +136,41 @@ const PaymentMethodList: React.FunctionComponent<IPaymentMethodListProps> = (
               </Label>
             </div>
           </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant={"ghost"}>
-                <Edit />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Edit</p>
-            </TooltipContent>
-          </Tooltip>
+          <Dialog
+            open={editId === method.id}
+            onOpenChange={(isOpen) => {
+              if (isOpen) {
+                setEditId(method.id);
+              } else {
+                setEditId(null);
+              }
+            }}
+          >
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DialogTrigger asChild>
+                  <Button variant={"ghost"}>
+                    <Edit />
+                  </Button>
+                </DialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Edit</p>
+              </TooltipContent>
+            </Tooltip>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Payment Method</DialogTitle>
+              </DialogHeader>
+              <EditPaymentMethodForm
+                params={{ id: method.id }}
+                onSuccess={() => {
+                  setInternalRefresh((prev) => !prev), setEditId(null);
+                }}
+                onClose={() => setEditId(null)}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
       );
     });
@@ -110,11 +178,9 @@ const PaymentMethodList: React.FunctionComponent<IPaymentMethodListProps> = (
 
   React.useEffect(() => {
     getUserPaymentMethod();
-  }, []);
+  }, [refresh]);
 
-  return (
-    <div className={`flex flex-col gap-2 px-4`}>{printPaymentMethod()}</div>
-  );
+  return <div className={`flex flex-col gap-2`}>{printPaymentMethod()}</div>;
 };
 
 export default PaymentMethodList;
