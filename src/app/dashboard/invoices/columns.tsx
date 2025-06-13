@@ -11,6 +11,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -18,7 +25,8 @@ import {
 import { apiCall } from "@/utils/apiHelper";
 import EditClientForm from "@/view/components/client/editClientForm";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash } from "lucide-react";
+import { Edit, MoreVertical, Trash } from "lucide-react";
+import { redirect, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -55,8 +63,8 @@ export const columns = (
   {
     accessorKey: "total",
     header: "Total",
-    cell: ({row}) => {
-      const price = row.original
+    cell: ({ row }) => {
+      const price = row.original;
       return price.total.toLocaleString("id-ID", {
         style: "currency",
         currency: "IDR",
@@ -84,112 +92,71 @@ export const columns = (
     header: "Status",
     cell: ({ row }) => {
       const status = row.original;
-      return (
-        status.status === "Pending" ? (
-          <Badge variant="outline" className="text-orange-400 border-orange-400">Pending</Badge>
-        ) : status.status === "Overdue" ? (
-          <Badge variant="destructive">Overdue</Badge>
-        ) : (
-          <Badge className="text-green-400 border-green-400">Paid</Badge>
-        )
-      )
-    }
+      return status.status === "Pending" ? (
+        <Badge variant="outline" className="text-orange-400 border-orange-400">
+          Pending
+        </Badge>
+      ) : status.status === "Overdue" ? (
+        <Badge variant="destructive">Overdue</Badge>
+      ) : (
+        <Badge className="text-green-400 border-green-400">Paid</Badge>
+      );
+    },
   },
-  // {
-  //   id: "actions",
-  //   header: "Actions",
-  //   cell: ({ row }) => {
-  //     const client = row.original;
-  //     const [open, setOpen] = useState(false);
-  //     const [openDialog, setOpenDialog] = useState(false);
+  {
+    id: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const invoice = row.original;
+      
 
-  //     const deleteClient = async () => {
-  //       const token = localStorage.getItem("token");
-  //       try {
-  //         const response = await apiCall.patch(
-  //           `/client/delete-client/${client.id}`,
-  //           null,
-  //           {
-  //             headers: {
-  //               Authorization: `Bearer ${token}`,
-  //             },
-  //           }
-  //         );
+      const handleDownload = () => {
+        const token = localStorage.getItem("token");
+        const link = document.createElement("a");
+        link.href = `http://localhost:4000/invoice/download/${invoice.id}?tkn=${token}`;
+        link.setAttribute("download", `invoice-${invoice.invoice_number}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
 
-  //         toast.success("Client Deleted", {
-  //           description: response.data.message,
-  //         });
+      const handleSendEmail = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await apiCall.post(`/invoice/send-email-payment/${invoice.invoice_number}`, null, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          })
 
-  //         setOpenDialog(false);
-  //         setRefresh((prev) => !prev);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-  //     return (
-  //       <div className="flex gap-2">
-  //         <Dialog>
-  //           <Tooltip>
-  //             <TooltipTrigger asChild>
-  //               <DialogTrigger asChild>
-  //                 <Button size={"icon"} variant={"outline"}>
-  //                   <Edit />
-  //                 </Button>
-  //               </DialogTrigger>
-  //             </TooltipTrigger>
-  //             <TooltipContent>
-  //               <p>Edit</p>
-  //             </TooltipContent>
-  //           </Tooltip>
-  //           <DialogContent>
-  //             <DialogHeader>
-  //               <DialogTitle>Edit Client</DialogTitle>
-  //               <DialogDescription>
-  //                 Update Your Client Information
-  //               </DialogDescription>
-  //             </DialogHeader>
-  //             <EditClientForm
-  //               onClose={() => setOpen(false)}
-  //               params={{ id: client.id }}
-  //               onSuccess={() => setRefresh((prev) => !prev)}
-  //             />
-  //           </DialogContent>
-  //         </Dialog>
-  //         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-  //           <Tooltip>
-  //             <TooltipTrigger asChild>
-  //               <DialogTrigger asChild>
-  //                 <Button size={"icon"} variant={"destructive"}>
-  //                   <Trash />
-  //                 </Button>
-  //               </DialogTrigger>
-  //             </TooltipTrigger>
-  //             <TooltipContent>
-  //               <p>Delete</p>
-  //             </TooltipContent>
-  //           </Tooltip>
-  //           <DialogContent>
-  //             <DialogHeader>
-  //               <DialogTitle>Delete Client</DialogTitle>
-  //               <DialogDescription>
-  //                 Are you sure you want to delete?
-  //               </DialogDescription>
-  //               <div className="flex justify-end gap-2">
-  //                 <Button variant={"destructive"} onClick={deleteClient}>
-  //                   Delete
-  //                 </Button>
-  //                 <Button
-  //                   variant={"outline"}
-  //                   onClick={() => setOpenDialog(false)}
-  //                 >
-  //                   Cancel
-  //                 </Button>
-  //               </div>
-  //             </DialogHeader>
-  //           </DialogContent>
-  //         </Dialog>
-  //       </div>
-  //     );
-  //   },
-  // },
+          console.log(response.data)
+          toast.success("Email Sent")
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      const handleDetail = () => {
+        const token = localStorage.getItem("token");
+        window.open(`http://localhost:4000/invoice/detail/${invoice.invoice_number}?tkn=${token}`, "_blank");
+      }
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"ghost"} size={"icon"}>
+              <MoreVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={handleDetail}>Detail</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDownload}>Download Invoice</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSendEmail}>Send Email</DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
 ];

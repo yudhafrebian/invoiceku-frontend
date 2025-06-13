@@ -41,10 +41,13 @@ const Products = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [open, setOpen] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
-  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
+  const [pagination, setPagination] = useState<{
+    total: number;
+    totalPages: number;
+  }>({ total: 0, totalPages: 1 });
 
   const page = Number(searchParams.get("page") || "1");
   const pageSize = Number(searchParams.get("limit") || "10");
