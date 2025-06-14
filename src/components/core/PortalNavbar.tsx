@@ -8,12 +8,12 @@ interface INavbarProps {
 
 const PortalNavbar: React.FunctionComponent<INavbarProps> = (props) => {
   return (
-    <nav className="flex justify-between items-center px-4 md:px-20 py-2">
+    <nav className="flex justify-between items-center px-4 md:px-20 py-2 shadow bg-white">
       <div className="flex gap-2">
         <p>LOGO</p>
-        <p>Payment Portal</p>
+        <p className="text-primary font-bold">Payment Portal</p>
       </div>
-      <h1 className="font-bold">{props.name}</h1>
+      <h1 className="font-bold text-xl text-primary">{props.name}</h1>
     </nav>
   );
 };

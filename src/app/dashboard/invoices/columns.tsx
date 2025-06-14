@@ -108,9 +108,11 @@ export const columns = (
     header: "Action",
     cell: ({ row }) => {
       const invoice = row.original;
+      const [loading, setLoading] = useState<boolean>(false);
       
 
       const handleDownload = () => {
+        
         const token = localStorage.getItem("token");
         const link = document.createElement("a");
         link.href = `http://localhost:4000/invoice/download/${invoice.id}?tkn=${token}`;
@@ -121,20 +123,33 @@ export const columns = (
       };
 
       const handleSendEmail = async () => {
+        const toastId = toast.loading("Sending email...");
+        setLoading(true);
+      
         try {
           const token = localStorage.getItem("token");
+      
           const response = await apiCall.post(`/invoice/send-email-payment/${invoice.invoice_number}`, null, {
             headers: {
               Authorization: `Bearer ${token}`,
-            }
-          })
-
-          console.log(response.data)
-          toast.success("Email Sent")
+            },
+          });
+      
+          console.log(response.data);
+      
+          toast.success("Email sent successfully", {
+            id: toastId,
+          });
         } catch (error) {
-          console.log(error)
+          console.error(error);
+          toast.error("Failed to send email", {
+            id: toastId,
+          });
+        } finally {
+          setLoading(false);
         }
-      }
+      };
+      
 
       const handleDetail = () => {
         const token = localStorage.getItem("token");
