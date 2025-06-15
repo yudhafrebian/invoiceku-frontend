@@ -9,10 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { transactionSchema } from "@/schemas/transaction-schema";
 import { apiCall } from "@/utils/apiHelper";
 import { Form, Formik, FormikProps } from "formik";
 import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface IInvoicePaymentPortalProps {
   params: Promise<{ slug: string }>;
@@ -62,6 +64,15 @@ const InvoicePaymentPortal: React.FunctionComponent<
     redirect("/unauthorized");
   }
 
+  const formatMethod = (method: string) => {
+    if (method === "Qris") return "QRIS";
+    return method
+      .toLowerCase()
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const getDetailInvoice = async () => {
     try {
       const invoiceNumber = await props.params;
@@ -80,6 +91,34 @@ const InvoicePaymentPortal: React.FunctionComponent<
     }
   };
 
+  const onSubmit = async (values: IFormValue) => {
+    try {
+      const formData = new FormData();
+
+      if (values.payment_proof) {
+        formData.append("payment_proof", values.payment_proof);
+      }
+
+      const response = await apiCall.post(
+        `/transaction/create-transaction/${data?.invoice_number}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response);
+      toast.success("Transaction Created", {
+        description: response.data.message,
+      });
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getDetailInvoice();
   }, []);
@@ -88,8 +127,8 @@ const InvoicePaymentPortal: React.FunctionComponent<
       <PortalNavbar name={data ? data.clients.name : "Loading..."} />
       <div className="w-full h-screen bg-[#F8FAFC] flex items-center justify-center">
         <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <CardTitle>Invoice Payment Portal</CardTitle>
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Invoice Payment Portal</CardTitle>
             <CardDescription>Invoice #{data?.invoice_number}</CardDescription>
           </CardHeader>
           <div className="p-6 space-y-4 text-sm text-gray-700">
@@ -138,29 +177,48 @@ const InvoicePaymentPortal: React.FunctionComponent<
 
             <div className="mt-6">
               <p>
-                <strong>Payment Method:</strong> {data?.payment_method}
+                <strong>Payment Method:</strong> {formatMethod(data?.payment_method || "Loading...")}
               </p>
               <Formik
                 initialValues={{
                   payment_proof: null as File | null,
                 }}
-                validationSchema={null}
+                validationSchema={transactionSchema}
                 onSubmit={(values: IFormValue) => {
                   console.log(values);
+                  onSubmit(values);
                 }}
               >
                 {(props: FormikProps<IFormValue>) => {
-                  const { errors, touched, handleBlur, handleChange } = props;
+                  const {
+                    errors,
+                    touched,
+                    handleBlur,
+                    handleChange,
+                    setFieldValue,
+                  } = props;
                   return (
-                    <Form>
+                    <Form className={`${data?.status === "Confirmating" && "hidden"}`}>
                       <div className="md:w-3/4 mx-auto">
                         <Input
                           type="file"
                           id="payment_proof"
                           accept="image/*"
-                          onChange={handleChange}
+                          onChange={(e) =>
+                            setFieldValue("payment_proof", e.target.files?.[0])
+                          }
                           onBlur={handleBlur}
+                          className={
+                            errors.payment_proof && touched.payment_proof
+                              ? "border-red-500"
+                              : ""
+                          }
                         />
+                        {errors.payment_proof && touched.payment_proof && (
+                          <p className="text-red-500 text-xs">
+                            {errors.payment_proof}
+                          </p>
+                        )}
                       </div>
 
                       <div className="text-center mt-4">
@@ -170,6 +228,11 @@ const InvoicePaymentPortal: React.FunctionComponent<
                   );
                 }}
               </Formik>
+              {data?.status === "Confirmating" && (
+                <div className="text-center mt-4 text-blue-500 text-lg font-semibold">
+                  <p>Your payment is being processed</p>
+                </div>
+              )}
             </div>
           </div>
         </Card>

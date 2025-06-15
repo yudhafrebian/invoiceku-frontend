@@ -15,6 +15,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -98,8 +99,14 @@ export const columns = (
         </Badge>
       ) : status.status === "Overdue" ? (
         <Badge variant="destructive">Overdue</Badge>
+      ) : status.status === "Confirmating" ? (
+        <Badge variant="outline" className="text-blue-400 border-blue-400">
+          Confirmating
+        </Badge>
       ) : (
-        <Badge className="text-green-400 border-green-400">Paid</Badge>
+        <Badge variant="outline" className="text-green-400 border-green-400">
+          Paid
+        </Badge>
       );
     },
   },
@@ -109,10 +116,8 @@ export const columns = (
     cell: ({ row }) => {
       const invoice = row.original;
       const [loading, setLoading] = useState<boolean>(false);
-      
 
       const handleDownload = () => {
-        
         const token = localStorage.getItem("token");
         const link = document.createElement("a");
         link.href = `http://localhost:4000/invoice/download/${invoice.id}?tkn=${token}`;
@@ -125,18 +130,22 @@ export const columns = (
       const handleSendEmail = async () => {
         const toastId = toast.loading("Sending email...");
         setLoading(true);
-      
+
         try {
           const token = localStorage.getItem("token");
-      
-          const response = await apiCall.post(`/invoice/send-email-payment/${invoice.invoice_number}`, null, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-      
+
+          const response = await apiCall.post(
+            `/invoice/send-email-payment/${invoice.invoice_number}`,
+            null,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
           console.log(response.data);
-      
+
           toast.success("Email sent successfully", {
             id: toastId,
           });
@@ -149,12 +158,14 @@ export const columns = (
           setLoading(false);
         }
       };
-      
 
       const handleDetail = () => {
         const token = localStorage.getItem("token");
-        window.open(`http://localhost:4000/invoice/detail/${invoice.invoice_number}?tkn=${token}`, "_blank");
-      }
+        window.open(
+          `http://localhost:4000/invoice/detail/${invoice.invoice_number}?tkn=${token}`,
+          "_blank"
+        );
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -163,10 +174,26 @@ export const columns = (
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+            {invoice.status === "Confirmating" && (
+              <DropdownMenuGroup>
+                <DropdownMenuItem>Payment Proof</DropdownMenuItem>
+                <DropdownMenuItem className="text-green-500">Confirm</DropdownMenuItem>
+                <DropdownMenuItem className="text-red-500">Reject</DropdownMenuItem>
+              </DropdownMenuGroup>
+            )}
+            {
+              invoice.status === "Confirmating" && (
+                <DropdownMenuSeparator />
+              )
+            }
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={handleDetail}>Detail</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDownload}>Download Invoice</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSendEmail}>Send Email</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDownload}>
+                Download Invoice
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSendEmail}>
+                Send Email
+              </DropdownMenuItem>
               <DropdownMenuItem>Delete</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

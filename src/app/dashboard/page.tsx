@@ -42,7 +42,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
       } else {
         router.replace("/sign-in");
       }
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
     } finally {
       setLoading(false);
@@ -60,4 +60,4 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
   );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard);
