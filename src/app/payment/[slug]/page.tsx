@@ -114,6 +114,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
       toast.success("Transaction Created", {
         description: response.data.message,
       });
+      window.location.reload();
     } catch (error: any) {
       console.log(error);
     }
@@ -175,7 +176,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
               <span>Rp{data?.total.toLocaleString()}</span>
             </div>
 
-            <div className="mt-6">
+            <div className="my-6">
               <p>
                 <strong>Payment Method:</strong> {formatMethod(data?.payment_method || "Loading...")}
               </p>

@@ -103,7 +103,9 @@ export const columns = (
         <Badge variant="outline" className="text-blue-400 border-blue-400">
           Confirmating
         </Badge>
-      ) : (
+      ) : status.status === "Rejected" ? (
+        <Badge variant="outline" className="text-red-400 border-red-400" >Rejected</Badge>
+      ): (
         <Badge variant="outline" className="text-green-400 border-green-400">
           Paid
         </Badge>
@@ -116,6 +118,8 @@ export const columns = (
     cell: ({ row }) => {
       const invoice = row.original;
       const [loading, setLoading] = useState<boolean>(false);
+      const [openConfirm, setOpenConfirm] = useState<boolean>(false);
+      const [openReject, setOpenReject] = useState<boolean>(false);
 
       const handleDownload = () => {
         const token = localStorage.getItem("token");
@@ -149,6 +153,8 @@ export const columns = (
           toast.success("Email sent successfully", {
             id: toastId,
           });
+
+          
         } catch (error) {
           console.error(error);
           toast.error("Failed to send email", {
@@ -157,6 +163,54 @@ export const columns = (
         } finally {
           setLoading(false);
         }
+      };
+
+      const handlePaymentProof = async () => {
+        toast.loading("Opening payment proof");
+        try {
+          const token = localStorage.getItem("token");
+          const response = await apiCall.get(
+            `/transaction/payment-proof/${invoice.invoice_number}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          window.open(response.data.data.payment_proof, "_blank");
+        } catch (error:any) {
+          console.log(error);
+          toast.error("Failed to open payment proof",{
+            description: error.response.data.error
+          });
+        } finally {
+          toast.dismiss();
+        }
+      };
+
+      const handleUpdateStatus = async (status: string) => {
+        const toastId = toast.loading("Updating status");
+        try {
+          const token = localStorage.getItem("token");
+          const response = await apiCall.patch(
+            `/invoice/update-status/${invoice.invoice_number}`,
+            { status },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          toast.success("Status updated",{
+            id: toastId
+          })
+
+          setRefresh((prev) => !prev);
+        } catch (error) {
+          console.log(error);
+        } 
       };
 
       const handleDetail = () => {
@@ -176,16 +230,37 @@ export const columns = (
           <DropdownMenuContent>
             {invoice.status === "Confirmating" && (
               <DropdownMenuGroup>
-                <DropdownMenuItem>Payment Proof</DropdownMenuItem>
-                <DropdownMenuItem className="text-green-500">Confirm</DropdownMenuItem>
-                <DropdownMenuItem className="text-red-500">Reject</DropdownMenuItem>
+                <DropdownMenuItem onClick={handlePaymentProof}>
+                  Payment Proof
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setOpenConfirm(true)}
+                  className="text-green-500"
+                >
+                  Confirm
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setOpenReject(true)} className="text-red-500">
+                  Reject
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             )}
-            {
-              invoice.status === "Confirmating" && (
-                <DropdownMenuSeparator />
-              )
-            }
+            {invoice.status === "Rejected" && (
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={handlePaymentProof}>
+                  Payment Proof
+                </DropdownMenuItem>
+               
+              </DropdownMenuGroup>
+            )}
+            {invoice.status === "Paid" && (
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={handlePaymentProof}>
+                  Payment Proof
+                </DropdownMenuItem>
+               
+              </DropdownMenuGroup>
+            )}
+            {invoice.status === "Confirmating" && <DropdownMenuSeparator />}
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={handleDetail}>Detail</DropdownMenuItem>
               <DropdownMenuItem onClick={handleDownload}>
@@ -197,6 +272,49 @@ export const columns = (
               <DropdownMenuItem>Delete</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
+          <Dialog open={openConfirm || openReject} onOpenChange={setOpenConfirm || setOpenReject}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {openConfirm ? "Are you sure you want to confirm this invoice?" : "Are you sure you want to reject this invoice?"}
+                </DialogTitle>
+                <DialogDescription>
+                  {openConfirm ? "Once you confirm this invoice, it cannot be undone." : "Once you reject this invoice, it cannot be undone."}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    setOpenConfirm(false);
+                    setOpenReject(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                {openConfirm && (
+                  <Button
+                    onClick={() => {
+                      handleUpdateStatus("Paid");
+                      setOpenConfirm(false);
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                )}
+                {openReject && (
+                  <Button
+                    onClick={() => {
+                      handleUpdateStatus("Rejected");
+                      setOpenReject(false);
+                    }}
+                  >
+                    Reject
+                  </Button>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
         </DropdownMenu>
       );
     },
