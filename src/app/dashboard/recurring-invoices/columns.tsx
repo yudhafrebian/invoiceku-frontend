@@ -124,7 +124,7 @@ export const columns = (
       const handleDownload = () => {
         const token = localStorage.getItem("token");
         const link = document.createElement("a");
-        link.href = `http://localhost:4000/invoice/download/${invoice.id}?tkn=${token}`;
+        link.href = `https://yudha.inovasisolusimuda.com/recurring-invoice/download/${invoice.invoice_number}?tkn=${token}`;
         link.setAttribute("download", `invoice-${invoice.invoice_number}.pdf`);
         document.body.appendChild(link);
         link.click();
@@ -139,7 +139,7 @@ export const columns = (
           const token = localStorage.getItem("token");
 
           const response = await apiCall.post(
-            `/invoice/send-email-payment/${invoice.invoice_number}`,
+            `/recurring-invoice/send-email/${invoice.invoice_number}`,
             null,
             {
               headers: {
@@ -216,7 +216,7 @@ export const columns = (
       const handleDetail = () => {
         const token = localStorage.getItem("token");
         window.open(
-          `https://yudha.inovasisolusimuda.com/invoice/detail/${invoice.invoice_number}?tkn=${token}`,
+          `https://yudha.inovasisolusimuda.com/recurring-invoice/detail/${invoice.invoice_number}?tkn=${token}`,
           "_blank"
         );
       };

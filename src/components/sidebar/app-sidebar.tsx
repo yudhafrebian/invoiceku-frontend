@@ -72,21 +72,15 @@ const items = [
     icon: ReceiptText,
   },
   {
-    title: "Reccuring Invoices",
-    url: "/dashboard/reccuring-invoices",
+    title: "Recurring Invoices",
+    url: "/dashboard/recurring-invoices",
     icon: CalendarSync,
   },
 ];
 
 export function AppSidebar() {
-  const [openSignOut, setOpenSignOut] = useState(false);
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const user = useAppSelector((state) => {
-    return state.authState;
-  });
   const pathname = usePathname();
-  const isMobile = useMediaQuery("(max-width: 639px)");
 
   return (
     <Sidebar collapsible="icon">
