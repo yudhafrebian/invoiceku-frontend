@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface IInvoicePaymentPortalProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; slug2: string; slug3: string }>;
 }
 
 interface IFormValue {
@@ -25,31 +25,39 @@ interface IFormValue {
 }
 
 interface IDetail {
-  id: string;
-  invoice_number: string;
-  start_date: Date;
-  due_date: Date;
-  total: number;
-  payment_method: string;
-  status: string;
-  clients: {
+  invoice: {
     id: string;
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    payment_ref: string;
-  };
-  invoice_items: {
-    id: string;
-    invoice_id: string;
-    product_id: string;
-    name_snapshot: string;
-    price_snapshot: number;
-    description: string;
-    quantity: number;
+    invoice_number: string;
+    start_date: Date;
+    due_date: Date;
     total: number;
-  }[];
+    payment_method: string;
+    status: string;
+    clients: {
+      id: string;
+      name: string;
+      email: string;
+      phone: string;
+      address: string;
+      payment_ref: string;
+    };
+    invoice_items: {
+      id: string;
+      invoice_id: string;
+      product_id: string;
+      name_snapshot: string;
+      price_snapshot: number;
+      description: string;
+      quantity: number;
+      total: number;
+    }[];
+  };
+  userPaymentMethod: {
+    account_name: string;
+    account_number: number;
+    payment_method: string;
+    qris_image_url: string | null;
+  };
 }
 
 const InvoicePaymentPortal: React.FunctionComponent<
@@ -76,8 +84,10 @@ const InvoicePaymentPortal: React.FunctionComponent<
   const getDetailInvoice = async () => {
     try {
       const invoiceNumber = await props.params;
+      const userInvoice = await props.params;
+      const clientName = await props.params;
       const response = await apiCall.get(
-        `/invoice/detail-payment/${invoiceNumber.slug}`,
+        `/invoice/detail-payment/${userInvoice.slug}/${clientName.slug2}-${invoiceNumber.slug3}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -100,7 +110,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
       }
 
       const response = await apiCall.post(
-        `/transaction/create-transaction/${data?.invoice_number}`,
+        `/transaction/create-transaction/${data?.invoice.invoice_number}`,
         formData,
         {
           headers: {
@@ -125,34 +135,36 @@ const InvoicePaymentPortal: React.FunctionComponent<
   }, []);
   return (
     <main>
-      <PortalNavbar name={data ? data.clients.name : "Loading..."} />
+      <PortalNavbar name={data ? data.invoice.clients.name : "Loading..."} />
       <div className="w-full h-screen bg-[#F8FAFC] flex items-center justify-center">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Invoice Payment Portal</CardTitle>
-            <CardDescription>Invoice #{data?.invoice_number}</CardDescription>
+            <CardDescription>
+              Invoice #{data?.invoice.invoice_number}
+            </CardDescription>
           </CardHeader>
           <div className="p-6 space-y-4 text-sm text-gray-700">
             <div>
               <p>
-                <strong>Client Name:</strong> {data?.clients.name}
+                <strong>Client Name:</strong> {data?.invoice.clients.name}
               </p>
               <p>
-                <strong>Email:</strong> {data?.clients.email}
+                <strong>Email:</strong> {data?.invoice.clients.email}
               </p>
               <p>
-                <strong>Phone:</strong> {data?.clients.phone}
+                <strong>Phone:</strong> {data?.invoice.clients.phone}
               </p>
               <p>
-                <strong>Address:</strong> {data?.clients.address}
+                <strong>Address:</strong> {data?.invoice.clients.address}
               </p>
               <p>
-                <strong>Status:</strong> {data?.status}
+                <strong>Status:</strong> {data?.invoice.status}
               </p>
               <p>
                 <strong>Due Date:</strong>{" "}
-                {data?.due_date
-                  ? new Date(data.due_date).toLocaleDateString()
+                {data?.invoice.due_date
+                  ? new Date(data.invoice.due_date).toLocaleDateString()
                   : "N/A"}
               </p>
             </div>
@@ -160,7 +172,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
             <div>
               <h4 className="font-semibold mt-4">Items</h4>
               <ul className="divide-y divide-gray-200">
-                {data?.invoice_items.map((item) => (
+                {data?.invoice.invoice_items.map((item) => (
                   <li key={item.id} className="py-2 flex justify-between">
                     <span>
                       {item.name_snapshot} ({item.quantity}x)
@@ -173,13 +185,24 @@ const InvoicePaymentPortal: React.FunctionComponent<
 
             <div className="flex justify-between border-t pt-4 font-bold text-lg">
               <span>Total</span>
-              <span>Rp{data?.total.toLocaleString()}</span>
+              <span>Rp{data?.invoice.total.toLocaleString()}</span>
             </div>
 
-            <div className="my-6">
-              <p>
-                <strong>Payment Method:</strong> {formatMethod(data?.payment_method || "Loading...")}
-              </p>
+            <div className="my-6 flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <p>
+                  <strong>Payment Method:</strong>{" "}
+                  {formatMethod(data?.invoice.payment_method || "Loading...")}
+                </p>
+                <p>
+                  <strong>Account Name:</strong>{" "}
+                  {data?.userPaymentMethod.account_name || "Loading..."}
+                </p>
+                <p>
+                  <strong>Account Number:</strong>{" "}
+                  {data?.userPaymentMethod.account_number || "Loading..."}
+                </p>
+              </div>
               <Formik
                 initialValues={{
                   payment_proof: null as File | null,
@@ -199,7 +222,11 @@ const InvoicePaymentPortal: React.FunctionComponent<
                     setFieldValue,
                   } = props;
                   return (
-                    <Form className={`${data?.status === "Confirmating" && "hidden"}`}>
+                    <Form
+                      className={`${
+                        data?.invoice.status === "Confirmating" && "hidden"
+                      }`}
+                    >
                       <div className="md:w-3/4 mx-auto">
                         <Input
                           type="file"
@@ -229,7 +256,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
                   );
                 }}
               </Formik>
-              {data?.status === "Confirmating" && (
+              {data?.invoice.status === "Confirmating" && (
                 <div className="text-center mt-4 text-blue-500 text-lg font-semibold">
                   <p>Your payment is being processed</p>
                 </div>
