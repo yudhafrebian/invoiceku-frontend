@@ -39,7 +39,7 @@ export function withAuth<P>(WrappedComponent: React.ComponentType<P>) {
         } catch (err) {
           console.error("Unauthorized", err);
           window.localStorage.removeItem("token");
-          router.replace("/unauthorized");
+          router.replace("/auth/sign-in");
         }
       };
 

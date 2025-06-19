@@ -16,10 +16,6 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface IInvoicePaymentPortalProps {
-  params: Promise<{ slug: string }>;
-}
-
 interface IFormValue {
   payment_proof: File | null;
 }
@@ -41,7 +37,7 @@ interface IDetail {
       address: string;
       payment_ref: string;
     };
-    recurring_invoice_item: {
+    invoice_items: {
       id: string;
       invoice_id: string;
       product_id: string;
@@ -60,11 +56,11 @@ interface IDetail {
   };
 }
 
-const InvoicePaymentPortal: React.FunctionComponent<
-  IInvoicePaymentPortalProps
-> = (props) => {
+const RecurringInvoicePaymentPortal = (props: {
+  params: { slug: string; slug2: string; slug3: string };
+}) => {
   const [data, setData] = useState<IDetail | null>(null);
-
+    console.log("params:", props.params);
   const queryParams = useSearchParams();
   const token = queryParams.get("tkn");
 
@@ -83,9 +79,9 @@ const InvoicePaymentPortal: React.FunctionComponent<
 
   const getDetailInvoice = async () => {
     try {
-      const invoiceNumber = await props.params;
+      const { slug, slug2, slug3 } = props.params;
       const response = await apiCall.get(
-        `/recurring-invoice/detail-payment/${invoiceNumber.slug}`,
+        `/invoice/detail-payment/${slug}/${slug2}-${slug3}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -93,7 +89,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
         }
       );
       setData(response.data.data);
-      console.log(response);
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +130,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
   return (
     <main>
       <PortalNavbar name={data ? data.invoice.clients.name : "Loading..."} />
-      <div className="w-full h-screen bg-[#F8FAFC] py-20 px-20 flex items-center justify-center">
+      <div className="w-full h-screen bg-[#F8FAFC] flex items-center justify-center">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Invoice Payment Portal</CardTitle>
@@ -170,7 +166,7 @@ const InvoicePaymentPortal: React.FunctionComponent<
             <div>
               <h4 className="font-semibold mt-4">Items</h4>
               <ul className="divide-y divide-gray-200">
-                {data?.invoice.recurring_invoice_item.map((item) => (
+                {data?.invoice.invoice_items.map((item) => (
                   <li key={item.id} className="py-2 flex justify-between">
                     <span>
                       {item.name_snapshot} ({item.quantity}x)
@@ -267,4 +263,4 @@ const InvoicePaymentPortal: React.FunctionComponent<
   );
 };
 
-export default InvoicePaymentPortal;
+export default RecurringInvoicePaymentPortal;
