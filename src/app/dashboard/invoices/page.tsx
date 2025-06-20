@@ -104,8 +104,6 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
         status: invoice.status,
       }));
 
-      console.log(response.data.data.pagination);
-
       setPagination(response.data.data.pagination);
       setData(formattedData);
     } catch (error) {

@@ -33,7 +33,6 @@ const ProfileForm = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log(file);
     if (file) {
       setUploadFile(file);
       const reader = new FileReader();
@@ -85,7 +84,6 @@ const ProfileForm = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
       toast.success("Profile Updated", {
         description: response.data.message,
       });
@@ -112,7 +110,6 @@ const ProfileForm = () => {
       onSubmit={(values: IFormValue) => {
         values.profile_img = uploadFile;
         updateUserProfile(values);
-        console.log(values);
       }}
     >
       {(props: FormikProps<IFormValue>) => {

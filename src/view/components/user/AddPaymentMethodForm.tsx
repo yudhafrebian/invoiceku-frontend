@@ -69,7 +69,6 @@ const AddPaymentMethodForm: React.FunctionComponent<
       }}
       validationSchema={addPaymentMethodSchema}
       onSubmit={(values: IFormValue) => {
-        console.log("Add Payment Method Form Submitted", values);
         onSubmit(values);
       }}
     >

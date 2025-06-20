@@ -148,8 +148,6 @@ export const columns = (
             }
           );
 
-          console.log(response.data);
-
           toast.success("Email sent successfully", {
             id: toastId,
           });

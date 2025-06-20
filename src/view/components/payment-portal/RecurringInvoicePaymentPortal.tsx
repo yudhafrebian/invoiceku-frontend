@@ -60,7 +60,6 @@ const RecurringInvoicePaymentPortal = (props: {
   params: { slug: string; slug2: string; slug3: string };
 }) => {
   const [data, setData] = useState<IDetail | null>(null);
-    console.log("params:", props.params);
   const queryParams = useSearchParams();
   const token = queryParams.get("tkn");
 
@@ -89,7 +88,6 @@ const RecurringInvoicePaymentPortal = (props: {
         }
       );
       setData(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -114,7 +112,6 @@ const RecurringInvoicePaymentPortal = (props: {
         }
       );
 
-      console.log(response);
       toast.success("Transaction Created", {
         description: response.data.message,
       });
@@ -203,7 +200,6 @@ const RecurringInvoicePaymentPortal = (props: {
                 }}
                 validationSchema={transactionSchema}
                 onSubmit={(values: IFormValue) => {
-                  console.log(values);
                   onSubmit(values);
                 }}
               >

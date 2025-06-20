@@ -82,7 +82,6 @@ const Clients = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data.data);
       setData(response.data.data.clients);
       setPagination(response.data.data.pagination);
     } catch (error) {

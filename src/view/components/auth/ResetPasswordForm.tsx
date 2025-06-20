@@ -41,7 +41,6 @@ const ResetPasswordForm = () => {
       initialValues={{ password: "", confirm_password: "" }}
       validationSchema={resetPasswordSchema}
       onSubmit={(values: IFormValue) => {
-        console.log("Reset Password Form Submitted", values);
         onSubmit(values);
       }}
     >

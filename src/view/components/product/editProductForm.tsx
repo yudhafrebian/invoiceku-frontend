@@ -45,7 +45,6 @@ const EditProductForm: React.FunctionComponent<IEditProductFormProps> = ({
         }
       );
       setData(response.data.data.product);
-      console.log(response.data.data.product);
     } catch (error) {
       console.log(error);
     }

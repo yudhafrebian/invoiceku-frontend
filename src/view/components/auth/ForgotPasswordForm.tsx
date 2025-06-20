@@ -33,7 +33,6 @@ const ForgotPasswordForm = () => {
       initialValues={{ email: "" }}
       validationSchema={forgotPasswordSchema}
       onSubmit={(values: IFormValue) => {
-        console.log("Forgot Password Form Submitted", values);
         onSubmit(values);
       }}
     >

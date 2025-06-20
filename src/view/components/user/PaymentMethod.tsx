@@ -62,7 +62,6 @@ const PaymentMethodList: React.FunctionComponent<IPaymentMethodListProps> = ({
           },
         }
       );
-      console.log(response.data.data);
       getUserPaymentMethod();
     } catch (error) {
       console.log(error);
@@ -77,7 +76,6 @@ const PaymentMethodList: React.FunctionComponent<IPaymentMethodListProps> = ({
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data.data);
       setPaymentMethod(response.data.data);
     } catch (error) {
       console.log(error);

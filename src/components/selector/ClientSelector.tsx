@@ -52,7 +52,6 @@ const ClientSelector: React.FunctionComponent<IClientSelectorProps> = ({
         },
       });
       setClients(response.data.data.clients);
-      console.log(response.data.data.clients);
     } catch (error) {
       console.log(error);
     }

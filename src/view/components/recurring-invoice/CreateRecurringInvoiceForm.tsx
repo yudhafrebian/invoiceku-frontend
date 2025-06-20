@@ -85,7 +85,6 @@ const CreateRecurringInvoiceForm = () => {
       }}
       validationSchema={recurringInvoiceSchema}
       onSubmit={(values) => {
-        console.log(values);
         onSubmit(values);
       }}
     >
@@ -125,7 +124,6 @@ const CreateRecurringInvoiceForm = () => {
                   responseType: "blob",
                 }
               );
-              console.log(response);
 
               const blob = new Blob([response.data], {
                 type: "application/pdf",

@@ -15,6 +15,10 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+interface IInvoicePaymentPortal{
+  params: Promise<{slug: string}>;
+}
+
 interface IFormValue {
   payment_proof: File | null;
 }
@@ -55,7 +59,7 @@ interface IDetail {
   };
 }
 
-const InvoicePaymentPortal = (props: { params: { slug: string } }) => {
+const InvoicePaymentPortal:React.FunctionComponent<IInvoicePaymentPortal> = (props) => {
   const [data, setData] = useState<IDetail | null>(null);
   const queryParams = useSearchParams();
   const token = queryParams.get("tkn");
@@ -75,13 +79,13 @@ const InvoicePaymentPortal = (props: { params: { slug: string } }) => {
 
   const getDetailInvoice = async () => {
     try {
-      const { slug } = props.params;
-      const response = await apiCall.get(`invoice/detail-payment/${slug}?tkn=${token}`, {
+      const invoiceNumber = await props.params
+      const response = await apiCall.get(`invoice/detail-payment/${invoiceNumber.slug}?tkn=${token}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setData(response.data.data)
+      setData(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +109,6 @@ const InvoicePaymentPortal = (props: { params: { slug: string } }) => {
           },
         }
       );
-
       toast.success("Transaction Created", {
         description: response.data.message,
       });

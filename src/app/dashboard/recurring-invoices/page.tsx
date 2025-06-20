@@ -91,7 +91,6 @@ const RecurringInvoice = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
 
       const formattedData = response.data.data.recurringInvoice.map((invoice: any) => ({
         id: invoice.id,

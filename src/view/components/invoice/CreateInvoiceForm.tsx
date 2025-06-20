@@ -72,7 +72,6 @@ const CreateInvoiceForm = () => {
       }}
       validationSchema={invoiceSchema}
       onSubmit={(values) => {
-        console.log(values);
         onSubmit(values);
       }}
     >

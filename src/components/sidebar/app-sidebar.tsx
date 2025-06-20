@@ -33,6 +33,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import {
   Dialog,
@@ -79,14 +80,22 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const dispatch = useAppDispatch();
   const pathname = usePathname();
 
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="bg-white">
         <SidebarGroup>
-          <SidebarHeader></SidebarHeader>
+          <SidebarHeader className="py-4">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/invoiceku-logo.jpg"
+                width={150}
+                height={32}
+                alt="InvoiceKu Logo"
+              />
+            </div>
+          </SidebarHeader>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

@@ -45,7 +45,6 @@ const EditClientForm: React.FunctionComponent<IEditClienttFormProps> = ({
           },
         }
       );
-      console.log(response.data.data.client);
         setData(response.data.data.client);
     } catch (error) {
       console.log(error);
@@ -98,7 +97,6 @@ const EditClientForm: React.FunctionComponent<IEditClienttFormProps> = ({
       validationSchema={clientSchema}
       onSubmit={(values: IFormValue) => {
         editClient(values);
-        console.log(values);
       }}
     >
       {(props: FormikProps<IFormValue>) => {

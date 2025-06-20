@@ -76,7 +76,6 @@ const EditPaymentMethodForm: React.FunctionComponent<
         }
       );
 
-      console.log(response.data.data);
       toast.success("Upadate Success", {
         description: response.data.message,
       })
@@ -101,7 +100,6 @@ const EditPaymentMethodForm: React.FunctionComponent<
       initialValues={formData}
       validationSchema={addPaymentMethodSchema}
       onSubmit={(values: IFormValue) => {
-        console.log("Add Payment Method Form Submitted", values);
         onSubmit(values);
       }}
     >

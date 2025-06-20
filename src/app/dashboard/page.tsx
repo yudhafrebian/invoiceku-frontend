@@ -44,7 +44,6 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
             token: response.data.data.token,
           })
         );
-        console.log(response);
       } else {
         router.replace("/sign-in");
       }

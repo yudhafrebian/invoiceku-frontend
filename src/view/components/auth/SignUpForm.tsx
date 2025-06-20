@@ -45,7 +45,6 @@ interface IFormValue {
             password: values.password,
           });
     
-          console.log(response);
     
           toast.success("Registration Success", {
             description: "Please check your email to verify your account",
@@ -69,7 +68,6 @@ interface IFormValue {
             }}
             validationSchema={signUpSchema}
             onSubmit={(values: IFormValue) => {
-              console.log(values);
               onSubmit(values);
             }}
           >
