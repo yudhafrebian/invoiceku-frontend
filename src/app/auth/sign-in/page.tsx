@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/core/navbar";
+import Navbar from "@/components/core/Navbar";
 import Link from "next/link";
 import SignInForm from "@/view/components/auth/SignInForm";
 import { redirect, useRouter } from "next/navigation";

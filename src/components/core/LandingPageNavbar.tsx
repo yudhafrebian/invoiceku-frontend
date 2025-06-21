@@ -5,15 +5,14 @@ import Image from "next/image";
 
 interface INavbarProps {}
 
-const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
+const LandingPageNavbar: React.FunctionComponent<INavbarProps> = (props) => {
   return (
-    <nav className="flex justify-between backdrop-blur-2xl items-center bg-white/30 backdrop-saturate-150  z-10 px-4 md:px-20 py-3">
-      <div>
+    <nav className="flex justify-between backdrop-blur-2xl items-center bg-white/30 backdrop-saturate-150 absolute w-full z-10 px-4 md:px-20 py-3">
+      <div className="relative w-26 h-6 md:w-36 md:h-8">
         <Link href={"/"}>
           <Image
             src="/invoiceku-logo.png"
-            width={150}
-            height={32}
+            fill
             alt="InvoiceKu Logo"
           />
         </Link>
@@ -30,4 +29,4 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   );
 };
 
-export default Navbar;
+export default LandingPageNavbar;

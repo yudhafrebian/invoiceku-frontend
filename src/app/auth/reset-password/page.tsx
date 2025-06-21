@@ -1,13 +1,13 @@
 "use client";
-import Navbar from "@/components/core/navbar";
+import Navbar from "@/components/core/Navbar";
 import ResetPasswordForm from "@/view/components/auth/ResetPasswordForm";
 import { redirect, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 const ResetPasswordPage = () => {
-  const queryParams = useSearchParams()
+  const queryParams = useSearchParams();
   const token = queryParams.get("tkn");
-  if(!token){
+  if (!token) {
     redirect("/unauthorized");
   }
   return (
