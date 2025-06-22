@@ -34,7 +34,7 @@ const HeroSection: React.FunctionComponent<IHeroSectionProps> = (props) => {
 
           <div>
             <Link href={"/auth/sign-up"}>
-              <Button variant={"secondary"} size={"lg"}>Get Started</Button>
+              <Button variant={"secondary"} size={"xl"}>Get Started</Button>
             </Link>
           </div>
         </div>

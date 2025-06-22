@@ -1,54 +1,10 @@
-"use client";
-import Navbar from "@/components/core/Navbar";
-import { apiCall } from "@/utils/apiHelper";
-import Image from "next/image";
-import Link from "next/link";
-import { redirect, useSearchParams } from "next/navigation";
-import * as React from "react";
+import { Suspense } from "react";
+import VerifyPageClient from "@/view/components/auth/client-page/VerifyPageClient";
 
-const VerifyPage = () => {
-  const queryParams = useSearchParams();
-  const token = queryParams.get("tkn");
-  if (!token) {
-    redirect("/unauthorized");
-  }
-  const verifyAccount = async () => {
-    try {
-      const response = await apiCall.patch(`/auth/verify`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  React.useEffect(() => {
-    verifyAccount();
-  }, []);
+export default function VerifyPage() {
   return (
-    <>
-      <div className="bg-[#FAFAFA] h-screen">
-        <Navbar />
-        <div className="p-8 shadow-lg w-1/3 m-auto mt-24 border rounded-2xl text-center text-primary">
-          <h1 className="text-2xl font-bold">Verify Account Success</h1>
-          <p className="mt-4 text-muted-foreground">
-            Your account has been successfully verified
-          </p>
-          <p className="text-muted-foreground">
-            Go back to website{" "}
-            <Link className="hover:text-primary underline" href="/">
-              here
-            </Link>
-          </p>
-          <div className="relative w-48 h-48 m-auto ">
-            <Image src={"../verified.svg"} alt="verify" fill />
-          </div>
-        </div>
-      </div>
-    </>
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyPageClient />
+    </Suspense>
   );
-};
-
-export default VerifyPage;
+}

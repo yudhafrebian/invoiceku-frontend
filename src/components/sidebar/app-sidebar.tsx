@@ -89,7 +89,7 @@ export function AppSidebar() {
           <SidebarHeader className="py-4">
             <div className="flex items-center gap-2">
               <Image
-                src="/invoiceku-logo.jpg"
+                src="/invoiceku-logo.png"
                 width={150}
                 height={32}
                 alt="InvoiceKu Logo"

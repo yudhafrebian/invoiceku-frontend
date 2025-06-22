@@ -1,5 +1,10 @@
 "use client";
-import * as Accordion from "@radix-ui/react-accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { ChevronDown } from "lucide-react";
 import React from "react";
 import { motion } from "framer-motion";
@@ -54,28 +59,17 @@ const FrequentQuestions = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
       >
-        <Accordion.Root
+        <Accordion
           type="multiple"
           className="space-y-4 md:w-2/3 mx-auto mt-8 md:mt-16"
         >
           {faqData.map((item, index) => (
-            <Accordion.Item
-              key={index}
-              value={`item-${index}`}
-              className="border rounded-lg overflow-hidden"
-            >
-              <Accordion.Header>
-                <Accordion.Trigger className="flex w-full items-center justify-between px-4 py-3 font-medium text-left hover:bg-gray-100 transition">
-                  {item.question}
-                  <ChevronDown className="h-4 w-4 transition-transform duration-200 AccordionChevron" />
-                </Accordion.Trigger>
-              </Accordion.Header>
-              <Accordion.Content className="p-4 overflow-hidden transition-all duration-300 data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-                <div className="pb-4 text-sm md:text-base">{item.answer}</div>
-              </Accordion.Content>
-            </Accordion.Item>
+            <AccordionItem value={`item-${index}`} key={index}>
+              <AccordionTrigger>{item.question}</AccordionTrigger>
+              <AccordionContent>{item.answer}</AccordionContent>
+            </AccordionItem>
           ))}
-        </Accordion.Root>
+        </Accordion>
       </motion.div>
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-
+import {HashLoader} from "react-spinners"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/hook";
@@ -50,7 +50,10 @@ export function withAuth<P>(WrappedComponent: React.ComponentType<P>) {
       };
     }, [dispatch, router]);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <div className="flex flex-col items-center justify-center h-screen">
+        <HashLoader size={50} />
+        <p className="text-xl font-bold">Loading</p>
+    </div>;
 
     return <WrappedComponent {...(props as React.PropsWithChildren<P>)} />;
   };
