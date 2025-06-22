@@ -148,6 +148,7 @@ export const columns = (
             }
           );
 
+
           toast.success("Email sent successfully", {
             id: toastId,
           });
@@ -264,7 +265,7 @@ export const columns = (
               <DropdownMenuItem onClick={handleDownload}>
                 Download Invoice
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSendEmail}>
+              <DropdownMenuItem onClick={() => {handleSendEmail(),console.log(invoice.invoice_number)}}>
                 Send Email
               </DropdownMenuItem>
               <DropdownMenuItem>Delete</DropdownMenuItem>
