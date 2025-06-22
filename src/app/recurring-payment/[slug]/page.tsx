@@ -85,7 +85,7 @@ const RecurringInvoicePaymentPortal: React.FC<IInvoicePaymentPortal> = (
     try {
       const invoiceNumber = await props.params;
       const response = await apiCall.get(
-        `/recurring-invoice/detail-payment/${invoiceNumber.slug}?tkn=${token}`,
+        `/invoice/detail-payment/${invoiceNumber.slug}?tkn=${token}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
