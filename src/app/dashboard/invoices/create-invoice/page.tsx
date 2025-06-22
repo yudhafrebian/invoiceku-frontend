@@ -1,3 +1,5 @@
+"use client";
+import { withAuth } from "@/hoc/withAuth";
 import CreateInvoiceForm from "@/view/components/invoice/CreateInvoiceForm";
 import SelectClient from "@/view/components/invoice/CreateInvoiceForm";
 import * as React from "react";
@@ -19,4 +21,4 @@ const CreateInvoicePage: React.FunctionComponent<ICreateInvoicePageProps> = (
   );
 };
 
-export default CreateInvoicePage;
+export default withAuth(CreateInvoicePage);

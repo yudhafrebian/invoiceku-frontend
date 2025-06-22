@@ -144,7 +144,7 @@ const InvoicePaymentPortal: React.FunctionComponent<IInvoicePaymentPortal> = (
       {!data ? (
         <InvoicePaymentSkeleton />
       ) : (
-        <div className="w-full  p-4 md:p-20 bg-[#F8FAFC] flex items-center justify-center">
+        <div className="w-full  p-4 md:p-20 bg-[#F8FAFC] dark:bg-background flex items-center justify-center">
           <Card className="w-full max-w-2xl">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl">Invoice Payment Portal</CardTitle>
@@ -152,7 +152,7 @@ const InvoicePaymentPortal: React.FunctionComponent<IInvoicePaymentPortal> = (
                 Invoice #{data?.invoice.invoice_number}
               </CardDescription>
             </CardHeader>
-            <div className="p-6 space-y-4 text-sm text-gray-700">
+            <div className="p-6 space-y-4 text-sm text-foreground">
               <div>
                 <p>
                   <strong>Client Name:</strong> {data?.invoice.clients.name}

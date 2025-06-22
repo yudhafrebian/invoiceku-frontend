@@ -2,6 +2,7 @@
 import ClientSelector from "@/components/selector/ClientSelector";
 import PaymentMethodSelector from "@/components/selector/PaymentMethodSelector";
 import ProductSelector from "@/components/selector/ProductSelector";
+import TemplateStyleSelector from "@/components/selector/TemplateStyleSelector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +24,7 @@ interface IFormValue {
   notes: string;
   total: number;
   payment_method: string;
+  template:string
   invoice_items: {
     product_id: string;
     name_snapshot: string;
@@ -69,6 +71,7 @@ const CreateInvoiceForm = () => {
         notes: "",
         total: 0,
         payment_method: "",
+        template: "Modern"
       }}
       validationSchema={invoiceSchema}
       onSubmit={(values) => {
@@ -138,6 +141,7 @@ const CreateInvoiceForm = () => {
           values.due_date,
           values.notes,
           values.payment_method,
+          values.template
         ]);
 
         return (
@@ -302,6 +306,12 @@ const CreateInvoiceForm = () => {
                 </FieldArray>
               </div>
               <div className="flex flex-col gap-4 md:w-1/3">
+                <div className="bg-card p-4">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="template">Template Style</Label>
+                    <TemplateStyleSelector name="template" />
+                  </div>
+                </div>
                 <div className="bg-card p-4">
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="notes">Notes</Label>

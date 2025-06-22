@@ -97,7 +97,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent className="bg-background text-foreground">
+      <SidebarContent className="bg-white dark:bg-background text-foreground">
         <SidebarGroup>
           <SidebarHeader className="py-4">
             <div className="flex items-center gap-2">
