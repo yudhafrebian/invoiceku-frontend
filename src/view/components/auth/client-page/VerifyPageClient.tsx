@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@/components/core/Navbar";
+import Navbar from "@/components/core/TempNavbar";
 import { apiCall } from "@/utils/apiHelper";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/core/Navbar";
+import Navbar from "@/components/core/TempNavbar";
 import Link from "next/link";
 import SignUpForm from "@/view/components/auth/SignUpForm";
 import SignUpCarousel from "@/view/components/auth/SignUpCarousel";
