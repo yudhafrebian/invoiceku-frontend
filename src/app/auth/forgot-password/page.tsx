@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/core/TempNavbar";
+import Navbar from "@/components/core/Navbar";
 import ForgotPasswordForm from "@/view/components/auth/ForgotPasswordForm";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

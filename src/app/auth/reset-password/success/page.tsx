@@ -1,4 +1,4 @@
-import Navbar from "@/components/core/TempNavbar";
+import Navbar from "@/components/core/Navbar";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
