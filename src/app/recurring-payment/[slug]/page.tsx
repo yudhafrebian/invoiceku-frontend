@@ -1,6 +1,7 @@
 "use client";
 import PortalNavbar from "@/components/core/PortalNavbar";
 import InvoicePaymentSkeleton from "@/components/skeleton/InvoicePaymentSkeleton";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,6 +17,10 @@ import { Form, Formik, FormikProps } from "formik";
 import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
+import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
 
 interface IInvoicePaymentPortal {
   params: Promise<{ slug: string }>;
@@ -162,28 +167,50 @@ const RecurringInvoicePaymentPortal: React.FC<IInvoicePaymentPortal> = (
                   <strong>Address:</strong> {data?.invoice.clients.address}
                 </p>
                 <p>
-                  <strong>Status:</strong> {data?.invoice.status}
-                </p>
-                <p>
                   <strong>Due Date:</strong>{" "}
                   {data?.invoice.due_date
                     ? new Date(data.invoice.due_date).toLocaleDateString()
                     : "N/A"}
                 </p>
+                <p>
+                  <strong>Status:</strong>{" "}
+                  {data?.invoice.status === "Pending" ? (
+                    <Badge
+                      variant="outline"
+                      className="text-orange-400 border-orange-400"
+                    >
+                      Pending
+                    </Badge>
+                  ) : data?.invoice.status === "Overdue" ? (
+                    <Badge variant="destructive">Overdue</Badge>
+                  ) : data?.invoice.status === "Confirmating" ? (
+                    <Badge
+                      variant="outline"
+                      className="text-blue-400 border-blue-400"
+                    >
+                      Confirmating
+                    </Badge>
+                  ) : data?.invoice.status === "Rejected" ? (
+                    <Badge
+                      variant="outline"
+                      className="text-red-400 border-red-400"
+                    >
+                      Rejected
+                    </Badge>
+                  ) : (
+                    <Badge
+                      variant="outline"
+                      className="text-green-400 border-green-400"
+                    >
+                      Paid
+                    </Badge>
+                  )}
+                </p>
               </div>
 
               <div>
                 <h4 className="font-semibold mt-4">Items</h4>
-                <ul className="divide-y divide-gray-200">
-                  {data?.invoice.invoice_items.map((item) => (
-                    <li key={item.id} className="py-2 flex justify-between">
-                      <span>
-                        {item.name_snapshot} ({item.quantity}x)
-                      </span>
-                      <span>Rp{item.total.toLocaleString()}</span>
-                    </li>
-                  ))}
-                </ul>
+                <DataTable columns={columns} data={data?.invoice.invoice_items} />
               </div>
 
               <div className="flex justify-between border-t pt-4 font-bold text-lg">
@@ -205,7 +232,17 @@ const RecurringInvoicePaymentPortal: React.FC<IInvoicePaymentPortal> = (
                     <strong>Account Number:</strong>{" "}
                     {data?.userPaymentMethod.account_number || "Loading..."}
                   </p>
+                  {data.userPaymentMethod.qris_image_url && (
+                    <Image
+                      src={data.userPaymentMethod.qris_image_url}
+                      className="mx-auto"
+                      alt="qris"
+                      width={200}
+                      height={200}
+                    />
+                  )}
                 </div>
+                <Separator />
                 <Formik
                   initialValues={{
                     payment_proof: null as File | null,
@@ -264,6 +301,27 @@ const RecurringInvoicePaymentPortal: React.FC<IInvoicePaymentPortal> = (
                 {data?.invoice.status === "Confirmating" && (
                   <div className="text-center mt-4 text-blue-500 text-lg font-semibold">
                     <p>Your payment is being processed</p>
+                  </div>
+                )}
+                {data?.invoice.status === "Paid" && (
+                  <div className="text-center mt-4 text-green-500 text-lg font-semibold">
+                    <p>Payment Confirmed</p>
+                  </div>
+                )}
+                {data?.invoice.status === "Rejected" && (
+                  <div className="text-center mt-4 text-red-500 text-lg font-semibold">
+                    <p>Payment Rejected</p>
+                    <p className="text-sm text-muted-foreground">
+                      Please contact the invoice owner
+                    </p>
+                  </div>
+                )}
+                {data?.invoice.status === "Overdue" && (
+                  <div className="text-center mt-4 text-red-500 text-lg font-semibold">
+                    <p>Payment Overdue</p>
+                    <p className="text-sm text-muted-foreground">
+                      Please contact the invoice owner
+                    </p>
                   </div>
                 )}
               </div>

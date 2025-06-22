@@ -5,17 +5,23 @@ import Image from "next/image";
 import { Separator } from "../ui/separator";
 
 interface INavbarProps {
-    name: any
+  name: any;
 }
 
 const PortalNavbar: React.FunctionComponent<INavbarProps> = (props) => {
   return (
-    <nav className="flex justify-between items-center px-4 md:px-20 py-4 shadow bg-white">
-      <div className="flex items-center gap-2">
-        <Image src="/invoiceku-logo.png" width={150} height={32} alt="InvoiceKu Logo" />
-        <p className="text-primary font-bold">Payment Portal</p>
+    <nav className="flex justify-between items-center px-2 md:px-20 md:py-4 py-2 shadow bg-white">
+      <div className="flex flex-col md:flex-row items-center gap-2">
+        <div className="relative w-26 h-6 md:w-36 md:h-8">
+          <Image
+            src="/invoiceku-logo.png"
+            fill
+            alt="InvoiceKu Logo"
+          />
+        </div>
+        <p className="text-primary md:text-base text-sm font-bold">Payment Portal</p>
       </div>
-      <h1 className="font-bold text-xl text-primary">{props.name}</h1>
+      <h1 className="font-bold text-sm md:text-xl text-primary">{props.name}</h1>
     </nav>
   );
 };
