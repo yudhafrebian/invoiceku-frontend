@@ -142,14 +142,14 @@ const CreateInvoiceForm = () => {
 
         return (
           <Form className="flex flex-col gap-4">
-            <div className="flex gap-4">
-              <div className="w-1/3 bg-white p-4">
+            <div className="flex md:flex-row flex-col gap-4">
+              <div className="md:w-1/3 bg-card text-foreground p-4">
                 <ClientSelector
                   name="client_id"
                   setFieldValue={setFieldValue}
                 />
               </div>
-              <div className="w-2/3 bg-white p-4">
+              <div className="md:w-2/3 bg-card p-4">
                 <div className="flex gap-4 mb-4">
                   <div className="flex flex-col gap-2 w-1/2">
                     <Label htmlFor="start_date">Invoice Date</Label>
@@ -205,14 +205,14 @@ const CreateInvoiceForm = () => {
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <div className="bg-white w-2/3 p-4">
+            <div className="flex md:flex-row flex-col gap-4">
+              <div className="bg-card md:w-2/3 p-4">
                 <FieldArray name="invoice_items">
                   {({ push, remove }) => (
-                    <div>
-                      <table className="w-full border mt-4">
+                    <div className="w-full overflow-x-auto">
+                      <table className="w-full border mt-4 min-w-[800px]">
                         <thead>
-                          <tr className="bg-primary text-white">
+                          <tr className="bg-primary dark:bg-card text-white">
                             <th className="p-2">Item Name</th>
                             <th className="p-2">Description</th>
                             <th className="p-2">Unit Cost</th>
@@ -301,14 +301,14 @@ const CreateInvoiceForm = () => {
                   )}
                 </FieldArray>
               </div>
-              <div className="flex flex-col gap-4 w-1/3">
-                <div className="bg-white p-4">
+              <div className="flex flex-col gap-4 md:w-1/3">
+                <div className="bg-card p-4">
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="notes">Notes</Label>
                     <Textarea name="notes" onChange={handleChange} />
                   </div>
                 </div>
-                <div className="bg-white p-4 ">
+                <div className="bg-card p-4 ">
                   <div className="flex justify-between">
                     <Label htmlFor="total">Total</Label>
                     <p id="total" className="font-semibold">
@@ -323,7 +323,7 @@ const CreateInvoiceForm = () => {
                     </p>
                   </div>
                 </div>
-                <div className="bg-white p-4">
+                <div className="bg-card p-4">
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="payment_method">Payment Method</Label>
                     <PaymentMethodSelector

@@ -47,7 +47,7 @@ const ResetPasswordForm = () => {
       {(props: FormikProps<IFormValue>) => {
         const { errors, touched, handleBlur, handleChange } = props;
         return (
-          <Form className="flex flex-col mx-auto gap-4 w-3/4">
+          <Form className="flex flex-col mx-auto gap-4 md:w-3/4">
             <div>
               <div className="flex gap-2">
                 <Input

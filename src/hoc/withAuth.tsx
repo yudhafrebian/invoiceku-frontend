@@ -1,17 +1,19 @@
 "use client";
-import {HashLoader} from "react-spinners"
+import { HashLoader } from "react-spinners";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/hook";
 import { apiCall } from "@/utils/apiHelper";
 import { setLogin } from "@/utils/redux/features/authSlice";
 import axios from "axios";
+import { useTheme } from "next-themes";
 
 export function withAuth<P>(WrappedComponent: React.ComponentType<P>) {
   return function ProtectedComponent(props: P) {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(true);
+    const { resolvedTheme } = useTheme();
 
     useEffect(() => {
       const token = window.localStorage.getItem("token");
@@ -50,10 +52,13 @@ export function withAuth<P>(WrappedComponent: React.ComponentType<P>) {
       };
     }, [dispatch, router]);
 
-    if (loading) return <div className="flex flex-col items-center justify-center h-screen">
-        <HashLoader size={50} />
-        <p className="text-xl font-bold">Loading</p>
-    </div>;
+    if (loading)
+      return (
+        <div className="flex flex-col items-center justify-center h-screen">
+          <HashLoader size={50} color={resolvedTheme === "dark" ? "#ffffff" : "#000"} />
+          <p className="text-xl font-bold">Loading</p>
+        </div>
+      );
 
     return <WrappedComponent {...(props as React.PropsWithChildren<P>)} />;
   };

@@ -49,7 +49,7 @@ const faqData = [
 
 const FrequentQuestions = () => {
   return (
-    <div className="p-8 md:p-20 w-full bg-[#F9FAFB]">
+    <div className="p-8 md:p-20 w-full bg-[#F9FAFB] dark:bg-background dark:border-t">
       <h2 className="text-3xl md:text-4xl font-bold text-center">
         Frequently Asked Questions
       </h2>

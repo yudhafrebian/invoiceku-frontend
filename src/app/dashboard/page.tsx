@@ -58,22 +58,22 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
     keepLogin();
   }, []);
   return (
-    <main className="p-4 md:p-10  bg-[#FAFAFA]">
+    <main className="p-4 md:p-10 bg-background text-foreground ">
       <div>
         <h1 className="font-bold text-lg md:text-2xl text-primary">
           Dashboard
         </h1>
         <h1 className="font-semibold text-lg md:text-xl text-primary">
-          welcome {user.first_name}
+          Welcome, {user.first_name}!
         </h1>
       </div>
       <div className="flex flex-col gap-20 mt-8">
-        <div className="flex gap-8">
-          <div className="bg-white p-4 rounded-2xl shadow w-1/2">
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="bg-white dark:bg-background text-foreground dark:border-2 p-4 rounded-2xl shadow md:w-1/2">
             <h2 className="font-semibold text-lg mb-4">Invoices Summary</h2>
             <DashboardSummary />
           </div>
-          <div className="bg-white p-4 rounded-2xl shadow w-1/2">
+          <div className="bg-white dark:bg-background text-foreground dark:border-2 p-4 rounded-2xl shadow md:w-1/2">
             <h2 className="font-semibold text-lg mb-4">Newest Invoices</h2>
             <TopInvoices />
             <Link href={"/dashboard/invoices"}>
@@ -81,14 +81,14 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
             </Link>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-2xl shadow">
+        <div className="bg-white dark:bg-background text-foreground dark:border-2 p-4 rounded-2xl shadow">
           <h2 className="font-semibold text-lg mb-4">Clients</h2>
           <TopClients />
           <Link href={"/dashboard/clients"}>
             <Button className="mt-6">To Client Page</Button>
           </Link>
         </div>
-        <div className="bg-white p-4 rounded-2xl shadow">
+        <div className="bg-white dark:bg-background text-foreground dark:border-2 p-4 rounded-2xl shadow">
           <h2 className="font-semibold text-lg mb-4">Products</h2>
           <TopProducts />
           <Link href={"/dashboard/products"}>

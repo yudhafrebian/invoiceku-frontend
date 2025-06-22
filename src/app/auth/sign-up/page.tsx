@@ -15,9 +15,9 @@ const SignUp = () => {
     }
   }, []);
   return (
-    <div className="h-screen bg-[#fafafa] ">
+    <div className="h-screen bg-[#fafafa] dark:bg-background">
       <Navbar />
-      <div className="bg-white w-[90%] md:w-2/3 md:h-[35em] m-auto mt-16 rounded-2xl shadow-lg flex flex-col md:flex-row justify-center gap-0 md:gap-4 p-2 py-4 md:p-4 text-primary">
+      <div className="bg-card w-[90%] md:w-2/3 md:h-[35em] m-auto mt-16 rounded-2xl shadow-lg flex flex-col md:flex-row justify-center gap-0 md:gap-4 p-2 py-4 md:p-4 text-primary">
         <SignUpCarousel />
 
         <div className="md:w-1/2 px-4 md:px-8">

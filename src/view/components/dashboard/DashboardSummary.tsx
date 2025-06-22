@@ -53,80 +53,74 @@ const DashboardSummary = () => {
     fetchSummary();
   }, []);
   return (
-    <div className="grid grid-cols-3 gap-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-2 text-lg">
-            Total Invoices <ReceiptText className="text-indigo-700" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <p className="text-2xl font-bold">{data?.invoiceSummary.totalInvoice || 0}</p>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-2 text-lg">
-            Invoice Pending <Hourglass className="text-amber-500" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <p className="text-2xl font-bold">{data?.invoiceSummary.pendingInvoice || 0}</p>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-2 text-lg">
-            Invoice Confirm <HandHelping className="text-blue-500" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <p className="text-2xl font-bold">{data?.invoiceSummary.confirmatingInvoice || 0}</p>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-2 text-lg">
-            Invoice Rejected <CircleX className="text-red-700" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <p className="text-2xl font-bold">{data?.invoiceSummary.rejectedInvoice || 0}</p>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-2 text-lg">
-            Invoice Overdue <ClockAlert className="text-red-500" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <p className="text-2xl font-bold">{data?.invoiceSummary.overdueInvoice || 0}</p>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between gap-2 text-lg">
-            Invoice Paid <CircleCheck className="text-green-500" />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <p className="text-2xl font-bold">{data?.invoiceSummary.paidInvoice || 0}</p>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <Card className="p-3 md:p-6">
+      <CardHeader className="p-0">
+        <CardTitle className="flex items-center justify-between gap-2 text-sm md:text-lg">
+          Total Invoices <ReceiptText className="text-indigo-700" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="md:px-0">
+        <p className="md:text-2xl font-bold">{data?.invoiceSummary.totalInvoice || 0}</p>
+      </CardContent>
+    </Card>
+  
+    <Card className="p-3 md:p-6">
+      <CardHeader className="p-0">
+        <CardTitle className="flex items-center justify-between gap-2 text-sm md:text-lg">
+          Invoice Pending <Hourglass className="text-amber-500" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="md:px-0">
+        <p className="md:text-2xl font-bold">{data?.invoiceSummary.pendingInvoice || 0}</p>
+      </CardContent>
+    </Card>
+  
+    <Card className="p-3 md:p-6">
+      <CardHeader className="p-0">
+        <CardTitle className="flex items-center justify-between gap-2 text-sm md:text-lg">
+          Invoice Confirm <HandHelping className="text-blue-500" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="md:px-0">
+        <p className="md:text-2xl font-bold">{data?.invoiceSummary.confirmatingInvoice || 0}</p>
+      </CardContent>
+    </Card>
+  
+    <Card className="p-3 md:p-6">
+      <CardHeader className="p-0">
+        <CardTitle className="flex items-center justify-between gap-2 text-sm md:text-lg">
+          Invoice Rejected <CircleX className="text-red-700" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="md:px-0">
+        <p className="md:text-2xl font-bold">{data?.invoiceSummary.rejectedInvoice || 0}</p>
+      </CardContent>
+    </Card>
+  
+    <Card className="p-3 md:p-6">
+      <CardHeader className="p-0">
+        <CardTitle className="flex items-center justify-between gap-2 text-sm md:text-lg">
+          Invoice Overdue <ClockAlert className="text-red-500" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="md:px-0">
+        <p className="md:text-2xl font-bold">{data?.invoiceSummary.overdueInvoice || 0}</p>
+      </CardContent>
+    </Card>
+  
+    <Card className="p-3 md:p-6">
+      <CardHeader className="p-0">
+        <CardTitle className="flex items-center justify-between gap-2 text-sm md:text-lg">
+          Invoice Paid <CircleCheck className="text-green-500" />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="md:px-0">
+        <p className="md:text-2xl font-bold">{data?.invoiceSummary.paidInvoice || 0}</p>
+      </CardContent>
+    </Card>
+  </div>
+  
   );
 };
 

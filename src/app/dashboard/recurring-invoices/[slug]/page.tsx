@@ -29,11 +29,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-interface IInvoiceProps {}
+interface IParams {
+  params: Promise<{ slug: string }>;
+}
 
-const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
+const RecurringInvoiceChildren: React.FunctionComponent<IParams> = (props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const recurringInvoiceNumber = props.params;
 
   const [data, setData] = useState<any[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -54,7 +57,7 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [selectedPayment, setSelectedPayment] = useState(payment);
   const [selectedSort, setSelectedSort] = useState(sort);
 
-  const activeFiltersCount = [status, payment].filter(
+  const activeFiltersCount = [search, status, payment, sort].filter(
     Boolean
   ).length;
 
@@ -76,22 +79,26 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
     router.replace(`?${params.toString()}`);
   };
 
-  const getInvoice = async () => {
+  const getRecurringInvoice = async () => {
     try {
+      const recurringInvoiceNumber = await props.params;
       const token = window.localStorage.getItem("token");
-      const response = await apiCall.get("/invoice/all-invoice", {
-        params: {
-          page,
-          limit: pageSize,
-          search,
-          status,
-          payment,
-          sort,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await apiCall.get(
+        `/recurring-invoice/all/children/${recurringInvoiceNumber.slug}`,
+        {
+          params: {
+            page,
+            limit: pageSize,
+            search,
+            status,
+            payment,
+            sort,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const formattedData = response.data.data.invoice.map((invoice: any) => ({
         id: invoice.id,
@@ -113,7 +120,7 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      getInvoice();
+      getRecurringInvoice();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
   }, [refresh, page, pageSize, search, status, payment, sort]);
@@ -122,17 +129,17 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
     <div className="p-4 md:p-10 flex flex-col gap-4">
       <div>
         <h1 className="font-bold text-lg md:text-2xl text-primary">
-          Manage Invoices
+          Recurring Invoices:{" "}
+          {data[0]?.invoice_number.substring(
+            0,
+            data[0]?.invoice_number.lastIndexOf("-")
+          )}
         </h1>
         <p className="text-muted-foreground text-sm md:text-base">
-          Here you can manage your invoices
+          Here you can manage your recurring invoices
         </p>
       </div>
-      <div className="flex justify-end">
-        <Link href={"/dashboard/invoices/create-invoice"}>
-          <Button type="button">Create Invoice</Button>
-        </Link>
-      </div>
+
       <div className="flex flex-col md:flex-row gap-4 mb-4 border rounded-lg p-4">
         <div className="flex gap-4 md:w-1/3">
           <div className="relative w-full ">
@@ -261,4 +268,4 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
   );
 };
 
-export default withAuth(Invoices);
+export default withAuth(RecurringInvoiceChildren);

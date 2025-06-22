@@ -28,6 +28,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import RecurringTypeFilter from "@/components/filter/RecurringTypeFilter";
+import RecurringInvoiceSorter from "@/components/sorter/RecurringInvoiceSorter";
 
 
 const RecurringInvoice = () => {
@@ -46,14 +48,16 @@ const RecurringInvoice = () => {
   const search = searchParams.get("search") || "";
   const status = searchParams.get("status") || "";
   const payment = searchParams.get("payment") || "";
+  const type = searchParams.get("type") || "";
   const sort = searchParams.get("sort") || "";
 
-  const [searchInput, setSearchInput] = useState(search);
-  const [selectedStatus, setSelectedStatus] = useState(status);
-  const [selectedPayment, setSelectedPayment] = useState(payment);
-  const [selectedSort, setSelectedSort] = useState(sort);
+  const [searchInput, setSearchInput] = useState<string>(search);
+  const [selectedStatus, setSelectedStatus] = useState<string>(status);
+  const [selectedPayment, setSelectedPayment] = useState<string>(payment);
+  const [selectedSort, setSelectedSort] = useState<string>(sort);
+  const [selectedType, setSelectedType] = useState<string>(type);
 
-  const activeFiltersCount = [search, status, payment, sort].filter(
+  const activeFiltersCount = [status, payment, type].filter(
     Boolean
   ).length;
 
@@ -69,6 +73,7 @@ const RecurringInvoice = () => {
     setSelectedStatus("");
     setSelectedPayment("");
     setSelectedSort("");
+    setSelectedType("");
 
     const params = new URLSearchParams();
     params.set("page", "1");
@@ -86,6 +91,7 @@ const RecurringInvoice = () => {
           status,
           payment,
           sort,
+          type
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -97,10 +103,12 @@ const RecurringInvoice = () => {
         client: invoice.clients?.name || "Unknown",
         invoice_number: invoice.invoice_number,
         start_date: new Date(invoice.start_date).toLocaleDateString(),
-        due_date: new Date(invoice.due_date).toLocaleDateString(),
         total: invoice.total,
         payment_method: invoice.payment_method,
-        status: invoice.status,
+        recurrence_type: invoice.recurrence_type,
+        recurrence_interval: invoice.recurrence_interval,
+        duration: invoice.duration,
+        due_in_days: invoice.due_in_days
       }));
 
 
@@ -116,7 +124,7 @@ const RecurringInvoice = () => {
       getRecurringInvoice();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [refresh, page, pageSize, search, status, payment, sort]);
+  }, [refresh, page, pageSize, search, status, payment, sort, type]);
 
   return (
     <div className="p-4 md:p-10 flex flex-col gap-4">
@@ -178,7 +186,7 @@ const RecurringInvoice = () => {
                       updateQuery("payment", val);
                     }}
                   />
-                  <StatusPaymentFilter
+                  <RecurringTypeFilter
                     value={selectedStatus}
                     onChange={(val) => {
                       setSelectedStatus(val);
@@ -187,7 +195,7 @@ const RecurringInvoice = () => {
                   />
                 </div>
                 <div className="hidden md:block">
-                  <StatusPaymentFilter
+                  <RecurringTypeFilter
                     value={selectedStatus}
                     onChange={(val) => {
                       setSelectedStatus(val);
@@ -209,7 +217,7 @@ const RecurringInvoice = () => {
           />
         </div>
         <div className="hidden md:block">
-          <StatusPaymentFilter
+          <RecurringTypeFilter
             value={selectedStatus}
             onChange={(val) => {
               setSelectedStatus(val);
@@ -218,7 +226,7 @@ const RecurringInvoice = () => {
           />
         </div>
         <div className="flex gap-4">
-          <InvoiceSorter
+          <RecurringInvoiceSorter
             value={selectedSort}
             onChange={(val) => {
               setSelectedSort(val);

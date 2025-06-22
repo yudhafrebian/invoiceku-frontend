@@ -13,11 +13,13 @@ interface IFormValue {
 
 const ForgotPasswordForm = () => {
   const router = useRouter();
-  const [error, setError] = React.useState(false);
-  const [errMessage, setErrMessage] = React.useState("");
+  const [error, setError] = React.useState<boolean>(false);
+  const [errMessage, setErrMessage] = React.useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmit = async (values: IFormValue) => {
     try {
+      setLoading(true);
       const response = await apiCall.post("/auth/forgot-password", {
         email: values.email,
       });
@@ -26,6 +28,8 @@ const ForgotPasswordForm = () => {
       console.log(error);
       setError(true);
       setErrMessage(error.response.data.error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -60,7 +64,7 @@ const ForgotPasswordForm = () => {
               ) : null}
             </div>
             <div className="text-center mt-4">
-              <Button type="submit">Send Reset Link</Button>
+              <Button disabled={loading} type="submit">{loading ? "Sending..." : "Send Reset Link"}</Button>
             </div>
           </Form>
         );

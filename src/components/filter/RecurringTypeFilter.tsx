@@ -1,23 +1,21 @@
 "use client";
 import { apiCall } from "@/utils/apiHelper";
-import { useField } from "formik";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
+import { useRouter, useSearchParams } from "next/navigation";
 
-interface IPaymentMethodProps {
-  name: string;
-  placeholder?: string;
+interface ITypeFilterProps {
+  value: string;
+  onChange: (val: string) => void;
 }
 
-const RecurringTypeSelector: React.FunctionComponent<IPaymentMethodProps> = ({
-  name,
-  placeholder,
-}) => {
-  const [field, meta, helper] = useField(name);
+const RecurringTypeFilter = ({ value, onChange }: ITypeFilterProps) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const [types, setTypes] = useState<string[]>([]);
 
@@ -30,32 +28,29 @@ const RecurringTypeSelector: React.FunctionComponent<IPaymentMethodProps> = ({
     }
   };
 
+  const handleTypeChange = (type: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (type === value) {
+      params.delete("type");
+      onChange("");
+    } else {
+      params.set("type", type);
+      onChange(type);
+    }
+
+    params.set("page", "1");
+    router.replace(`?${params.toString()}`);
+
+  };
 
   useEffect(() => {
     getRecurringType();
   }, []);
   return (
-    <Popover
-      open={open}
-      onOpenChange={(open) => {
-        setOpen(open);
-        if (!open) {
-          helper.setTouched(true);
-        }
-      }}
-    >
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          type="button"
-          role="combobox"
-          className={`cursor-pointer w-full justify-between text-[10px] md:text-sm ${
-            meta.touched && meta.error ? "border-red-500" : ""
-          }`}
-        >
-          {field.value
-            ? field.value
-            : placeholder || "Select Payment Reference"}
+        <Button variant={"outline"} type="button" role="combobox">
+          {value ? types.find((type) => type === value) : "Select Recurring Type"}
           <ChevronsUpDown />
         </Button>
       </PopoverTrigger>
@@ -67,17 +62,14 @@ const RecurringTypeSelector: React.FunctionComponent<IPaymentMethodProps> = ({
                 <CommandItem
                   key={type}
                   value={type}
-                  onSelect={() => {
-                    helper.setValue(type);
-                    helper.setTouched(true);
+                  onSelect={(currentValue) => {
+                    handleTypeChange(currentValue);
                     setOpen(false);
                   }}
                 >
                   {type}
                   <Check
-                    className={
-                      field.value === type ? "opacity-100" : "opacity-0"
-                    }
+                    className={value === type ? "opacity-100" : "opacity-0"}
                   />
                 </CommandItem>
               ))}
@@ -85,11 +77,8 @@ const RecurringTypeSelector: React.FunctionComponent<IPaymentMethodProps> = ({
           </CommandList>
         </Command>
       </PopoverContent>
-      {meta.error && meta.touched && (
-          <p className="text-xs text-red-500">{meta.error}</p>
-      )}
     </Popover>
   );
 };
 
-export default RecurringTypeSelector;
+export default RecurringTypeFilter;

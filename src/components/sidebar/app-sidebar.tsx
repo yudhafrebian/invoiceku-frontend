@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import {
   Settings,
   LayoutDashboard,
@@ -43,7 +44,7 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hook";
 import { setLogout } from "@/utils/redux/features/authSlice";
 import { usePathname, useRouter } from "next/navigation";
@@ -81,19 +82,33 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { resolvedTheme } = useTheme();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const logoSrc =
+    resolvedTheme === "dark"
+      ? "/invoiceku-logo-light.png"
+      : "/invoiceku-logo.png";
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent className="bg-white">
+      <SidebarContent className="bg-background text-foreground">
         <SidebarGroup>
           <SidebarHeader className="py-4">
             <div className="flex items-center gap-2">
-              <Image
-                src="/invoiceku-logo.png"
-                width={150}
-                height={32}
-                alt="InvoiceKu Logo"
-              />
+              {mounted && (
+                <Image
+                  src={logoSrc}
+                  width={150}
+                  height={32}
+                  alt="InvoiceKu Logo"
+                />
+              )}
             </div>
           </SidebarHeader>
           <SidebarGroupContent>

@@ -16,8 +16,8 @@ export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main className="w-full bg-[#F8FAFC]">
-        <div className="flex items-center justify-between bg-white shadow px-4 py-2">
+      <main className="w-full">
+        <div className="flex items-center justify-between bg-white dark:bg-background text-foreground border-b-2 px-4 py-2">
           <SidebarTrigger className="cursor-pointer" />
           <DashboardNavbar />
         </div>

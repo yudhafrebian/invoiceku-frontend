@@ -18,7 +18,7 @@ const Testimonials = () => {
         viewport={{ once: true, amount: 0.5 }}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 md:mt-16">
-          <div className="p-4 md:p-8 flex flex-col gap-6 rounded-md shadow-lg bg-[#F9FAFB]">
+          <div className="p-4 md:p-8 flex flex-col gap-6 rounded-md shadow-lg bg-[#F9FAFB] dark:bg-card">
             <p>
               "InvoiceKu has streamlined our billing process completely. We save
               hours every week."
@@ -36,7 +36,7 @@ const Testimonials = () => {
               </div>
             </div>
           </div>
-          <div className="p-4 md:p-8 flex flex-col gap-6 rounded-md shadow-lg bg-[#F9FAFB]">
+          <div className="p-4 md:p-8 flex flex-col gap-6 rounded-md shadow-lg bg-[#F9FAFB] dark:bg-card">
             <p>
               "The automated features are fantastic. Our cash flow has improved
               significantly."
@@ -54,7 +54,7 @@ const Testimonials = () => {
               </div>
             </div>
           </div>
-          <div className="p-4 md:p-8 flex flex-col gap-6 rounded-md shadow-lg bg-[#F9FAFB]">
+          <div className="p-4 md:p-8 flex flex-col gap-6 rounded-md shadow-lg bg-[#F9FAFB] dark:bg-card">
             <p>
               "Simple, clean, and exactly what we needed. Highly recommended!"
             </p>

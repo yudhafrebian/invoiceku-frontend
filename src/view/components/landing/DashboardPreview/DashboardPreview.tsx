@@ -67,7 +67,7 @@ const DashboardPreview = () => {
   ];
 
   return (
-    <div className="p-8 md:p-20 w-full bg-[#F9FAFB]">
+    <div className="p-8 md:p-20 w-full bg-[#F9FAFB] dark:bg-background dark:border-y dark:border-muted">
       <div className="text-center">
         <h1 className="text-3xl md:text-4xl font-bold mb-2 md:mb-5">
           Clean & Intuitive Dashboard
@@ -82,7 +82,7 @@ const DashboardPreview = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
       >
-        <div className="flex flex-col mx-auto gap-6 md:gap-12 md:w-3/4 p-2 md:p-8 bg-white rounded-2xl shadow-2xl mt-8 md:mt-16">
+        <div className="flex flex-col mx-auto gap-6 md:gap-12 md:w-3/4 p-2 md:p-8 bg-card dark:shadow-white/10 rounded-2xl shadow-2xl mt-8 md:mt-16">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <Card className="p-3 md:p-6">
               <CardHeader className="p-0">
