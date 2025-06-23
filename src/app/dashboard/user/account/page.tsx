@@ -1,5 +1,6 @@
 "use client";
 import { withAuth } from '@/hoc/withAuth';
+import AccountView from '@/view/components/user/account/AccountView';
 import * as React from 'react';
 
 interface IAccountPageProps {
@@ -7,8 +8,8 @@ interface IAccountPageProps {
 
 const AccountPage: React.FunctionComponent<IAccountPageProps> = (props) => {
   return (
-    <div>
-      <h1>Account Page</h1>
+    <div className='px-8 md:px-80 py-12'>
+      <AccountView />
     </div>
   )
 };

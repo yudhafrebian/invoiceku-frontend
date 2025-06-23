@@ -40,7 +40,7 @@ const DashboardNavbar: React.FunctionComponent<IDashboardNavbarProps> = (
       <ModeToggle />
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
-          <div className="flex items-center gap-4 hover:bg-[#f5f5f5] p-2 rounded-xl">
+          <div className="flex items-center gap-4 hover:bg-[#f5f5f5] dark:hover:bg-card p-2 rounded-xl">
             <Avatar>
               <AvatarImage src={user.profile_img || ""} />
               <AvatarFallback>{user.first_name[0]}</AvatarFallback>
@@ -66,11 +66,6 @@ const DashboardNavbar: React.FunctionComponent<IDashboardNavbarProps> = (
             <Link href={"/dashboard/user/payment-method"}>
               <DropdownMenuItem>
                 <Wallet /> Payment Method
-              </DropdownMenuItem>
-            </Link>
-            <Link href={"/dashboard/user/setting"}>
-              <DropdownMenuItem>
-                <Settings /> Settings
               </DropdownMenuItem>
             </Link>
           </DropdownMenuGroup>

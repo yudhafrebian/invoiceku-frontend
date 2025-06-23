@@ -12,7 +12,7 @@ import { withAuth } from "@/hoc/withAuth";
 
 const ProfilePage= () => {
   return (
-    <div className="px-8 md:px-80 py-4">
+    <div className="px-8 md:px-80 py-12">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Profile</CardTitle>
