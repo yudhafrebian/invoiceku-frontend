@@ -38,9 +38,6 @@ const TypeSelector: React.FunctionComponent<ITypeSelectorProps> = ({
       open={open}
       onOpenChange={(open) => {
         setOpen(open);
-        if (!open) {
-          helper.setTouched(true);
-        }
       }}
     >
       <PopoverTrigger asChild>
@@ -68,7 +65,6 @@ const TypeSelector: React.FunctionComponent<ITypeSelectorProps> = ({
                   value={type}
                   onSelect={() => {
                     helper.setValue(type);
-                    helper.setTouched(true);
                     setOpen(false);
                   }}
                 >

@@ -4,6 +4,7 @@ import PaymentMethodSelector from "@/components/selector/PaymentMethodSelector";
 import ProductSelector from "@/components/selector/ProductSelector";
 import ProductSelectorRecurring from "@/components/selector/ProductSelectorRecurring";
 import RecurringTypeSelector from "@/components/selector/RecurringType";
+import TemplateStyleSelector from "@/components/selector/TemplateStyleSelector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,6 +35,7 @@ interface IFormValue {
   due_in_days: number;
   total: number;
   payment_method: string;
+  template:string
   recurring_invoice_items: {
     product_id: number;
     name_snapshot: string;
@@ -81,6 +83,7 @@ const CreateRecurringInvoiceForm = () => {
         notes: "",
         total: 0,
         payment_method: "",
+        template:"Modern",
         recurring_invoice_items: [],
       }}
       validationSchema={recurringInvoiceSchema}
@@ -130,6 +133,8 @@ const CreateRecurringInvoiceForm = () => {
               });
               const url = URL.createObjectURL(blob);
               setPreviewUrl(url);
+              console.log("Preview URL:", url);
+
             } catch (error) {
               console.error("Failed to generate preview:", error);
             }
@@ -150,6 +155,7 @@ const CreateRecurringInvoiceForm = () => {
           values.notes,
           values.payment_method,
           values.recurring_invoice_items,
+          values.template
         ]);
 
         return (
@@ -416,6 +422,12 @@ const CreateRecurringInvoiceForm = () => {
                 </FieldArray>
               </div>
               <div className="flex flex-col gap-4 md:w-1/3">
+              <div className="bg-card p-4">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="template">Template Style</Label>
+                    <TemplateStyleSelector name="template" />
+                  </div>
+                </div>
                 <div className="bg-card p-4">
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="notes">Notes</Label>
@@ -459,7 +471,7 @@ const CreateRecurringInvoiceForm = () => {
             {previewUrl && (
               <div className="mt-8">
                 <h2 className="font-bold text-lg mb-2">Live Invoice Preview</h2>
-                <iframe
+                <embed
                   src={previewUrl}
                   width="100%"
                   height="800px"
@@ -467,6 +479,7 @@ const CreateRecurringInvoiceForm = () => {
                 />
               </div>
             )}
+            
           </Form>
         );
       }}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
 import { useTheme } from "next-themes";
+import { ModeToggle } from "./ThemeToogle";
 
 interface INavbarProps {
   name: any;
@@ -24,20 +25,21 @@ const PortalNavbar: React.FunctionComponent<INavbarProps> = (props) => {
       : "/invoiceku-logo.png";
 
   return (
-    <nav className="flex justify-between items-center px-2 md:px-20 md:py-4 py-2 shadow bg-background dark:border-b-2">
+    <nav className="flex justify-between items-center px-2 md:px-20 md:py-4 py-2 shadow  dark:bg-background border-b-2">
       <div className="flex flex-col md:flex-row items-center gap-2">
         <div className="relative w-26 h-6 md:w-36 md:h-8">
-          {mounted && (
-            <Image
-              src={logoSrc}
-              fill
-              alt="InvoiceKu Logo"
-            />
-          )}
+          {mounted && <Image src={logoSrc} fill alt="InvoiceKu Logo" />}
         </div>
-        <p className="text-primary md:text-base text-sm font-bold">Payment Portal</p>
+        <p className="text-primary md:text-base text-sm font-bold">
+          Payment Portal
+        </p>
       </div>
-      <h1 className="font-bold text-sm md:text-xl text-primary">{props.name}</h1>
+      <div className="flex flex-col items-end md:items-center md:flex-row gap-2 md:gap-4">
+        <ModeToggle />
+        <h1 className="font-bold text-sm md:text-xl text-primary">
+          {props.name}
+        </h1>
+      </div>
     </nav>
   );
 };

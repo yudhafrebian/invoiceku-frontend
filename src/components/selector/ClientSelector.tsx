@@ -66,9 +66,6 @@ const ClientSelector: React.FunctionComponent<IClientSelectorProps> = ({
         open={open}
         onOpenChange={(open) => {
           setOpen(open);
-          if (!open) {
-            helper.setTouched(true);
-          }
         }}
       >
         <PopoverTrigger asChild>
@@ -97,9 +94,8 @@ const ClientSelector: React.FunctionComponent<IClientSelectorProps> = ({
                     value={client.id.toString()}
                     onSelect={() => {
                       helper.setValue(client.id);
-                      helper.setTouched(true);
                       setOpen(false);
-                      setFieldValue("payment_method", client.payment_ref)
+                      setFieldValue("payment_method", client.payment_ref);
                     }}
                   >
                     {client.name}
@@ -118,21 +114,27 @@ const ClientSelector: React.FunctionComponent<IClientSelectorProps> = ({
           <p className="text-xs text-red-500">{meta.error}</p>
         )}
       </Popover>
-    {field.value && (
+      {field.value && (
         <div className="flex flex-col gap-1 mt-4">
-            <h5 className="font-semibold">Clients:</h5>
-            <div className="flex gap-2">
-                <h5 className="font-semibold">
-                    {clients.find((client) => client.id === field.value)?.name}
-                </h5>
-                <CheckCircle className="text-green-500" />
-            </div>
-            <p className="text-xs text-muted-foreground">
-               Email: {clients.find((client) => client.id === field.value)?.email}
-            </p>
-            <p className="text-xs text-muted-foreground">Payment Referrence: {formatMethod(clients.find((client) => client.id === field.value)?.payment_ref || '')}</p>
+          <h5 className="font-semibold">Clients:</h5>
+          <div className="flex gap-2">
+            <h5 className="font-semibold">
+              {clients.find((client) => client.id === field.value)?.name}
+            </h5>
+            <CheckCircle className="text-green-500" />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Email: {clients.find((client) => client.id === field.value)?.email}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Payment Referrence:{" "}
+            {formatMethod(
+              clients.find((client) => client.id === field.value)
+                ?.payment_ref || ""
+            )}
+          </p>
         </div>
-    )}
+      )}
     </div>
   );
 };

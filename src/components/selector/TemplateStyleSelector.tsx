@@ -38,9 +38,6 @@ const TemplateStyleSelector: React.FunctionComponent<IUnitSelectorProps> = ({
       open={open}
       onOpenChange={(open) => {
         setOpen(open);
-        if (!open) {
-          helper.setTouched(true);
-        }
       }}
     >
       <PopoverTrigger asChild>
@@ -68,7 +65,6 @@ const TemplateStyleSelector: React.FunctionComponent<IUnitSelectorProps> = ({
                   value={style}
                   onSelect={() => {
                     helper.setValue(style);
-                    helper.setTouched(true);
                     setOpen(false);
                   }}
                 >

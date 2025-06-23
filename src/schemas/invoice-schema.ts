@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const invoiceSchema = Yup.object().shape({
-  client_id: Yup.string().required("Client is required"),
+  client_id: Yup.number().required("Client is required"),
   invoice_number: Yup.string().required("Invoice number is required"),
   start_date: Yup.date().required("Start date is required"),
   due_date: Yup.date().required("Due date is required"),

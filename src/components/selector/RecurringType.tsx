@@ -39,9 +39,6 @@ const RecurringTypeSelector: React.FunctionComponent<IPaymentMethodProps> = ({
       open={open}
       onOpenChange={(open) => {
         setOpen(open);
-        if (!open) {
-          helper.setTouched(true);
-        }
       }}
     >
       <PopoverTrigger asChild>
@@ -69,7 +66,6 @@ const RecurringTypeSelector: React.FunctionComponent<IPaymentMethodProps> = ({
                   value={type}
                   onSelect={() => {
                     helper.setValue(type);
-                    helper.setTouched(true);
                     setOpen(false);
                   }}
                 >

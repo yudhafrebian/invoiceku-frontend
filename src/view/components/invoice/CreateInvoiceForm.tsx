@@ -76,6 +76,7 @@ const CreateInvoiceForm = () => {
       validationSchema={invoiceSchema}
       onSubmit={(values) => {
         onSubmit(values);
+        console.log(values);
       }}
     >
       {(props: FormikProps<IFormValue>) => {
@@ -101,13 +102,12 @@ const CreateInvoiceForm = () => {
             try {
               const token = window.localStorage.getItem("token");
               
-
               const response = await apiCall.post(
                 "invoice/preview",
                 {
                   ...values,
-                  start_date: values.start_date.toISOString(),
-                  due_date: values.due_date.toISOString(),
+                  start_date: values.start_date,
+                  due_date: values.due_date,
                 },
                 {
                   headers: {
@@ -355,7 +355,7 @@ const CreateInvoiceForm = () => {
             {previewUrl && (
               <div className="mt-8">
                 <h2 className="font-bold text-lg mb-2">Live Invoice Preview</h2>
-                <iframe
+                <embed
                   src={previewUrl}
                   width="100%"
                   height="800px"

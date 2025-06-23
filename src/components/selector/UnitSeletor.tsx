@@ -38,9 +38,6 @@ const UnitSelector: React.FunctionComponent<IUnitSelectorProps> = ({
       open={open}
       onOpenChange={(open) => {
         setOpen(open);
-        if (!open) {
-          helper.setTouched(true);
-        }
       }}
     >
       <PopoverTrigger asChild>
@@ -68,7 +65,6 @@ const UnitSelector: React.FunctionComponent<IUnitSelectorProps> = ({
                   value={unit}
                   onSelect={() => {
                     helper.setValue(unit);
-                    helper.setTouched(true);
                     setOpen(false);
                   }}
                 >

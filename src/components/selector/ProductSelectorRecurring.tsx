@@ -57,9 +57,6 @@ const ProductSelectorRecurring: React.FunctionComponent<IProductSelectorProps> =
         open={open}
         onOpenChange={(open) => {
           setOpen(open);
-          if (!open) {
-            helper.setTouched(true);
-          }
         }}
       >
         <PopoverTrigger asChild>
@@ -88,7 +85,6 @@ const ProductSelectorRecurring: React.FunctionComponent<IProductSelectorProps> =
                     value={product.id.toString()}
                     onSelect={() => {
                       helper.setValue(product.id);
-                      helper.setTouched(true);
                       setOpen(false);
                       setFieldValue(`recurring_invoice_items.${productIndex}.name_snapshot`, product.name);
                       setFieldValue(`recurring_invoice_items.${productIndex}.description`, product.description);

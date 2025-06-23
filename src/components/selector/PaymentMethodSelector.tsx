@@ -48,9 +48,6 @@ const PaymentMethodSelector: React.FunctionComponent<IPaymentMethodProps> = ({
       open={open}
       onOpenChange={(open) => {
         setOpen(open);
-        if (!open) {
-          helper.setTouched(true);
-        }
       }}
     >
       <PopoverTrigger asChild>
@@ -78,7 +75,6 @@ const PaymentMethodSelector: React.FunctionComponent<IPaymentMethodProps> = ({
                   value={method}
                   onSelect={() => {
                     helper.setValue(method);
-                    helper.setTouched(true);
                     setOpen(false);
                   }}
                 >
