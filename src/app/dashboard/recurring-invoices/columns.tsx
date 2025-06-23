@@ -109,6 +109,27 @@ export const columns = (
     header: "Action",
     cell: ({ row }) => {
       const invoice = row.original;
+      const [openDelete, setOpenDelete] = useState<boolean>(false);
+
+      const handleDelete = async () => {
+        const toastId = toast.loading("Deleting invoice");
+        try {
+          const token = localStorage.getItem("token");
+          const response = await apiCall.patch(`/recurring-invoice/delete-recurring-invoice/${invoice.invoice_number}`, null, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          toast.success("Invoice deleted",{
+            id: toastId
+          })
+
+          setRefresh((prev) => !prev);
+        } catch (error) {
+          console.log(error)
+        }
+      }
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -121,9 +142,30 @@ export const columns = (
               <Link href={`/dashboard/recurring-invoices/${invoice.invoice_number}`}>
                 <DropdownMenuItem>Detail</DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem className="text-red-500" onClick={() => setOpenDelete(true)}>Delete</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
+          <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you sure you want to delete this Recurring Invoice?</DialogTitle>
+                <DialogDescription>
+                  Once you delete this invoice, it cannot be undone and the remaining recurring invoice will be stopped.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    setOpenDelete(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleDelete} variant={"destructive"}>Delete</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </DropdownMenu>
       );
     },

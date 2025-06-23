@@ -120,6 +120,7 @@ export const columns = (
       const [loading, setLoading] = useState<boolean>(false);
       const [openConfirm, setOpenConfirm] = useState<boolean>(false);
       const [openReject, setOpenReject] = useState<boolean>(false);
+      const [openDelete, setOpenDelete] = useState<boolean>(false);
 
       const handleDownload = () => {
         const token = localStorage.getItem("token");
@@ -212,6 +213,26 @@ export const columns = (
         } 
       };
 
+      const handleDelete = async () => {
+        const toastId = toast.loading("Deleting invoice");
+        try {
+          const token = localStorage.getItem("token");
+          const response = await apiCall.patch(`/invoice/delete-invoice/${invoice.invoice_number}`, null, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          toast.success("Invoice deleted",{
+            id: toastId
+          })
+
+          setRefresh((prev) => !prev);
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
       const handleDetail = () => {
         const token = localStorage.getItem("token");
         window.open(
@@ -265,12 +286,33 @@ export const columns = (
               <DropdownMenuItem onClick={handleDownload}>
                 Download Invoice
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {handleSendEmail(),console.log(invoice.invoice_number)}}>
+              <DropdownMenuItem onClick={() => {handleSendEmail()}}>
                 Send Email
               </DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem className="text-red-500" onClick={() => setOpenDelete(true)}>Delete</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
+          <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you sure you want to delete this invoice?</DialogTitle>
+                <DialogDescription>
+                  Once you delete this invoice, it cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    setOpenDelete(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleDelete} variant={"destructive"}>Delete</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
           <Dialog open={openConfirm || openReject} onOpenChange={setOpenConfirm || setOpenReject}>
             <DialogContent>
               <DialogHeader>

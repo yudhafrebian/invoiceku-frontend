@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hook";
 import { setLogin } from "@/utils/redux/features/authSlice";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Camera, CircleUser, User2 } from "lucide-react";
+import { Camera, CircleUser, Loader2, User2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 
@@ -26,6 +26,8 @@ const ProfileForm = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => {
     return state.authState;
@@ -67,6 +69,7 @@ const ProfileForm = () => {
 
   const updateUserProfile = async (values: IFormValue) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       const formData = new FormData();
 
@@ -87,14 +90,29 @@ const ProfileForm = () => {
       toast.success("Profile Updated", {
         description: response.data.message,
       });
-    } catch (error) {
+
+      if(user.email !== values.email) {
+        toast.info("Email has been changed", {
+          description: "Please verify your email",
+        })
+      }
+      setIsEdit(false);
+      setUploadFile(null);
+      setImagePreview(null);
+    } catch (error: any) {
       console.log(error);
+      toast.error("Failed to update profile", {
+        description: error.response.data.error,
+      });
+    } finally {
+      setLoading(false);
+      setRefresh(!refresh);
     }
   };
 
   useEffect(() => {
     getUserProfile();
-  }, []);
+  }, [refresh]);
 
   return (
     <Formik
@@ -118,7 +136,7 @@ const ProfileForm = () => {
         return (
           <Form className="flex flex-col gap-4">
             {!isEdit ? (
-              <Avatar className="w-40 h-40 mx-auto">
+              <Avatar className="md:w-40 md:h-40 w-24 h-24 mx-auto">
                 <AvatarImage src={user.profile_img || undefined} />
                 <AvatarFallback>
                   <CircleUser size={40} />
@@ -151,7 +169,7 @@ const ProfileForm = () => {
             )}
             <Separator />
             <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex flex-col gap-2 w-1/2">
+              <div className="flex flex-col gap-2 md:w-1/2">
                 <Label htmlFor="first_name">First Name</Label>
                 <Input
                   id="first_name"
@@ -162,7 +180,7 @@ const ProfileForm = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex flex-col gap-2 w-1/2">
+              <div className="flex flex-col gap-2 md:w-1/2">
                 <Label htmlFor="last_name">Last Name</Label>
                 <Input
                   id="last_name"
@@ -206,13 +224,17 @@ const ProfileForm = () => {
                 Update
               </Button>
             </div>
-            <div className="flex gap-4 justify-end">
-              <Button className={isEdit ? "" : "hidden"} type="submit">
-                Save
-              </Button>
+            <div className={`${isEdit ? "flex" : "hidden"} gap-4 justify-end`}>
+              {loading ? (
+                <Button type="button" disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </Button>
+              ) : (
+                <Button type="submit">Save</Button>
+              )}
               <Button
                 variant={"destructive"}
-                className={isEdit ? "" : "hidden"}
                 type="button"
                 onClick={() => {
                   setIsEdit(!isEdit);
