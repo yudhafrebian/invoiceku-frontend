@@ -32,6 +32,10 @@ const EditProductForm: React.FunctionComponent<IEditProductFormProps> = ({
   params,
 }) => {
   const [data, setData] = useState<any>({});
+  const formatRupiah = (value: string) => {
+    const numeric = value.replace(/[^\d]/g, "");
+    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
 
   const getDetailProduct = async () => {
     try {
@@ -52,13 +56,14 @@ const EditProductForm: React.FunctionComponent<IEditProductFormProps> = ({
 
   const editProduct = async (values: IFormValue) => {
     try {
+      const cleanPrice = values.price.replace(/\./g, "");
       const token = window.localStorage.getItem("token");
       const response = await apiCall.patch(
         `/product/update-product/${params?.id}`,
         {
           name: values.name,
           description: values.description,
-          price: values.price,
+          price: Number(cleanPrice),
           type: values.type,
           unit: values.unit,
         },
@@ -89,7 +94,7 @@ const EditProductForm: React.FunctionComponent<IEditProductFormProps> = ({
       initialValues={{
         name: data.name || "",
         description: data.description || "",
-        price: data.price || "",
+        price: data.price ? formatRupiah(data.price.toString()) : "",
         type: data.type || "",
         unit: data.unit || "",
       }}
@@ -147,17 +152,26 @@ const EditProductForm: React.FunctionComponent<IEditProductFormProps> = ({
             <div className="flex flex-col gap-2">
               <Label htmlFor="price">Price</Label>
               <div>
-                <Input
-                  id="price"
-                  name="price"
-                  type="number"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={props.values.price}
-                  className={
-                    errors.price && touched.price ? "border-red-500" : ""
-                  }
-                />
+                <div className="flex items-center gap-x-2">
+                  <span className="px-3 py-2 border border-input rounded-md bg-muted text-sm text-muted-foreground">
+                    IDR
+                  </span>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="text"
+                    value={props.values.price}
+                    onBlur={handleBlur}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      const formatted = formatRupiah(raw);
+                      props.setFieldValue("price", formatted);
+                    }}
+                    className={
+                      errors.price && touched.price ? "border-red-500" : ""
+                    }
+                  />
+                </div>
                 {errors.price && touched.price && (
                   <p className="text-xs text-red-500 mt-1">{errors.price}</p>
                 )}
