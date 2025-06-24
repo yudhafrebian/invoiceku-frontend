@@ -17,7 +17,7 @@ const SignUpCarousel = () => {
       <CarouselContent>
         <CarouselItem className="flex flex-col justify-center items-center">
           <Image
-            src={"/invoice.svg"}
+            src={"/Invoice.svg"}
             width={400}
             height={400}
             alt=""
