@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { productSchema } from "@/schemas/product-schema";
 import { apiCall } from "@/utils/apiHelper";
 import { Formik, Form, FormikProps } from "formik";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface IFormValue {
@@ -27,7 +26,6 @@ const AddProductForm: React.FunctionComponent<IAddProductFormProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const router = useRouter();
 
   const formatRupiah = (value: string) => {
     const numeric = value.replace(/[^\d]/g, "");
