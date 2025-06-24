@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const Testimonials = () => {
   return (
-    <div className="p-8 md:p-20">
+    <div className="p-8 md:p-20 bg-white dark:bg-background">
       <div>
         <h2 className="text-3xl md:text-4xl font-bold text-center">
           What our Users say
