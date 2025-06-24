@@ -91,10 +91,10 @@ const ProfileForm = () => {
         description: response.data.message,
       });
 
-      if(user.email !== values.email) {
+      if (user.email !== values.email) {
         toast.info("Email has been changed", {
           description: "Please verify your email",
-        })
+        });
       }
       setIsEdit(false);
       setUploadFile(null);
@@ -102,7 +102,7 @@ const ProfileForm = () => {
     } catch (error: any) {
       console.log(error);
       toast.error("Failed to update profile", {
-        description: error.response.data.error,
+        description: error.response.data.error.message,
       });
     } finally {
       setLoading(false);
@@ -166,6 +166,12 @@ const ProfileForm = () => {
                   onChange={handleFileChange}
                 />
               </Avatar>
+            )}
+            {isEdit && (
+              <ul className="text-xs text-muted-foreground text-center">
+                <li>*jpg, *jpeg, *png</li>
+                <li>*max 1MB</li>
+              </ul>
             )}
             <Separator />
             <div className="flex flex-col md:flex-row gap-4">
