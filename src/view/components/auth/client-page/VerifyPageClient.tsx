@@ -34,9 +34,9 @@ const VerifyPageClient = () => {
   }, [token, router]);
 
   return (
-    <div className="bg-[#FAFAFA] h-screen">
+    <div className="bg-[#FAFAFA] dark:bg-background h-screen">
       <Navbar />
-      <div className="p-8 shadow-lg w-1/3 m-auto mt-24 border rounded-2xl text-center text-primary">
+      <div className="p-8 shadow-lg w-1/3 m-auto mt-24 border rounded-2xl bg-card text-center text-primary">
         <h1 className="text-2xl font-bold">Verify Account Success</h1>
         <p className="mt-4 text-muted-foreground">
           Your account has been successfully verified

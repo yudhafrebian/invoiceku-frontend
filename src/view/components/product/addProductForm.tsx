@@ -36,7 +36,6 @@ const AddProductForm: React.FunctionComponent<IAddProductFormProps> = ({
   const addProduct = async (values: IFormValue) => {
     try {
       const cleanPrice = values.price.replace(/\./g, "");
-      console.log(typeof cleanPrice);
       const token = window.localStorage.getItem("token");
       const response = await apiCall.post(
         "/product/create-product",

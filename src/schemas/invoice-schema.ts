@@ -3,8 +3,19 @@ import * as Yup from "yup";
 export const invoiceSchema = Yup.object().shape({
   client_id: Yup.number().required("Client is required"),
   invoice_number: Yup.string().required("Invoice number is required"),
-  start_date: Yup.date().required("Start date is required"),
-  due_date: Yup.date().required("Due date is required"),
+  start_date: Yup.string().required("Start date is required"),
+  due_date: Yup.string()
+    .required("Due date is required")
+    .test(
+      "is-after-start-date",
+      "Due date must be after start date",
+      function (value) {
+        const { start_date } = this.parent;
+        if (!value || !start_date) return true;
+        return new Date(value) > new Date(start_date);
+      }
+    ),
+
   notes: Yup.string(),
   total: Yup.number(),
   payment_method: Yup.string().required("Payment method is required"),
