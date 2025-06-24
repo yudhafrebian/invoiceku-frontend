@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/schemas/auth-schema";
 import { apiCall } from "@/utils/apiHelper";
 import { Formik, Form, FormikProps } from "formik";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -21,11 +21,13 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [errMessage, setErrMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const onSubmit = async (values: IFormValue) => {
     try {
+      setLoading(true);
       const response = await apiCall.post("/auth/signin", values);
 
       toast.success("Login Success", {
@@ -39,6 +41,8 @@ export default function SignInForm() {
       console.log(error);
       setError(true);
       setErrMessage(error.response.data.error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,9 +107,12 @@ export default function SignInForm() {
                 Forgot Password
               </p>
             </Link>
-            <Button type="submit" className="mt-2">
-              Sign In
-            </Button>
+            {loading ? (
+              <Button type="button" disabled><Loader2 className="mr-2 animate-spin" /> Signing in ...</Button>
+            ) : (
+              <Button type="submit">Sign In</Button>
+            )
+            }
             <div>
               <p className="text-sm text-muted-foreground text-center">
                 Don't have an account?{" "}
