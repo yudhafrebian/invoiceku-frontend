@@ -11,9 +11,9 @@ const ResetPasswordSuccessPage: React.FunctionComponent<
 > = (props) => {
   return (
     <>
-      <div className="h-screen bg-[#fafafa]">
+      <div className="h-screen bg-[#fafafa] dark:bg-background">
         <Navbar />
-        <div className="bg-white w-[90%] md:w-1/3 mx-auto mt-24 rounded-2xl shadow-lg p-8 text-primary">
+        <div className="bg-card w-[90%] md:w-1/3 mx-auto mt-24 rounded-2xl shadow-lg p-8 text-primary">
           <div className="text-center mb-8">
             <h1 className="text-2xl md:text-4xl font-semibold mb-2">
               Password Reset Success

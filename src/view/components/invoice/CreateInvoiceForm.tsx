@@ -75,7 +75,7 @@ const CreateInvoiceForm = () => {
       console.log(error);
       toast.error("Failed to create invoice", {
         id: toastID,
-        description: error.response.data.error,
+        description: error.response.data.message,
       });
     } finally {
       setLoading(false);
