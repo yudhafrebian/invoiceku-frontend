@@ -460,7 +460,7 @@ const CreateRecurringInvoiceForm = () => {
                 </div>
                 <div className="flex gap-4 justify-end">
                   <Button type="submit">Save Invoice</Button>
-                  <Link href="/dashboard/invoices">
+                  <Link href="/dashboard/recurring-invoices">
                     <Button variant={"destructive"} type="button">
                       Cancel
                     </Button>

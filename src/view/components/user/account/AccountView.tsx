@@ -42,6 +42,8 @@ const AccountView = () => {
           },
         }
       );
+
+      console.log(response);
       toast.success("Email sent successfully", {
         id: toastId,
         description: response.data.message,

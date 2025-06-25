@@ -52,8 +52,11 @@ const SignUpForm = () => {
       });
 
       router.push("/auth/sign-in");
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
+      toast.error("Registration Failed", {
+        description: error.response.data.message,
+      })
     } finally {
       setLoading(false);
     }

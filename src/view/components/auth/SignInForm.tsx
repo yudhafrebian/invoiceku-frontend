@@ -40,7 +40,7 @@ export default function SignInForm() {
     } catch (error: any) {
       console.log(error);
       setError(true);
-      setErrMessage(error.response.data.error);
+      setErrMessage(error.response.data.error || error.response.data.message);
     } finally {
       setLoading(false);
     }
