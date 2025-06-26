@@ -107,6 +107,7 @@ const RecurringInvoice = () => {
         payment_method: invoice.payment_method,
         recurrence_type: invoice.recurrence_type,
         recurrence_interval: invoice.recurrence_interval,
+        occurrences_done: invoice.occurrences_done,
         duration: invoice.duration,
         due_in_days: invoice.due_in_days
       }));
