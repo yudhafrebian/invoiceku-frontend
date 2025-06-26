@@ -41,6 +41,7 @@ export type Invoice = {
   payment_method: string;
   recurrence_type: string;
   recurrence_interval: number;
+  occurrences_done: number;
   duration: number;
   due_in_days: number;
 };
@@ -72,6 +73,10 @@ export const columns = (
   {
     accessorKey: "duration",
     header: "Duration",
+  },
+  {
+    accessorKey: "occurrences_done",
+    header: "Occurences Done",
   },
   {
     accessorKey: "due_in_days",
