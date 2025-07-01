@@ -35,10 +35,17 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Badge } from "@/components/ui/badge";
+import { useAppSelector } from "@/app/hook";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Clients = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const user = useAppSelector((state) => state.authState);
 
   const [open, setOpen] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -95,18 +102,38 @@ const Clients = () => {
   return (
     <div className="p-4 md:p-10 flex flex-col gap-4">
       <div>
-        <h1 className="font-bold text-lg md:text-2xl text-primary">Manage Clients</h1>
+        <h1 className="font-bold text-lg md:text-2xl text-primary">
+          Manage Clients
+        </h1>
         <p className="text-muted-foreground text-sm md:text-base">
           Add, edit, or remove your clients
         </p>
       </div>
       <div className="flex justify-end">
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button type="button">
-              Add New Client <Plus />
-            </Button>
-          </DialogTrigger>
+          {user.is_verified ? (
+            <DialogTrigger asChild>
+              <Button type="button">
+                Add New Client <Plus />
+              </Button>
+            </DialogTrigger>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="inline-block">
+                  <DialogTrigger asChild>
+                    <Button disabled type="button">
+                      Add New Client <Plus />
+                    </Button>
+                  </DialogTrigger>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Please verify your account first</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Client</DialogTitle>
