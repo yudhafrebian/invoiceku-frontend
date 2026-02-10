@@ -18,42 +18,57 @@ const Footer = () => {
             Simplifying invoice management for businesses worldwide.
           </p>
           <div className="flex gap-4 ">
-            <Instagram className="text-[#9CA3AF] hover:text-white/40 w-4 h-4 md:w-6 md:h-6" />
-            <Twitter className="text-[#9CA3AF] hover:text-white/40 w-4 h-4 md:w-6 md:h-6" />
-            <Linkedin className="text-[#9CA3AF] hover:text-white/40 w-4 h-4 md:w-6 md:h-6" />
+            <Instagram aria-label="Instagram" className="text-[#9CA3AF] hover:text-white/40 w-4 h-4 md:w-6 md:h-6" />
+            <Twitter aria-label="Twitter" className="text-[#9CA3AF] hover:text-white/40 w-4 h-4 md:w-6 md:h-6" />
+            <Linkedin aria-label="Linkedin" className="text-[#9CA3AF] hover:text-white/40 w-4 h-4 md:w-6 md:h-6" />
           </div>
         </div>
         <div className="md:text-base text-sm">
           <p className="text-white font-semibold mb-2 md:mb-4">Product</p>
-          <ul className="text-[#9CA3AF] flex flex-col gap-2 ">
-            <Link href={"#"} className="hover:text-white/40">
-              <li>Features</li>
-            </Link>
-            <Link href={"#"} className="hover:text-white/40">
-              <li>Pricing</li>
-            </Link>
-            <Link href={"#"} className="hover:text-white/40">
-              <li>Integrations</li>
-            </Link>
+          <ul className="text-[#9CA3AF] flex flex-col gap-2">
+            <li>
+              <Link href="#" className="hover:text-white/40">
+                Features
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-white/40">
+                Pricing
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-white/40">
+                Integrations
+              </Link>
+            </li>
           </ul>
         </div>
+
         <div className="md:text-base text-sm">
           <p className="text-white font-semibold mb-2 md:mb-4">Support</p>
           <ul className="text-[#9CA3AF] flex flex-col gap-2">
-            <Link href={"#"} className="hover:text-white/40">
-              <li>Help Center</li>
-            </Link>
-            <Link href={"#"} className="hover:text-white/40">
-              <li>Contact Us</li>
-            </Link>
-            <Link href={"#"} className="hover:text-white/40">
-              <li>Privacy Policy</li>
-            </Link>
+            <li>
+              <Link href="#" className="hover:text-white/40">
+                Help Center
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-white/40">
+                Contact Us
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-white/40">
+                Privacy Policy
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
       <Separator className="my-2 md:my-4 bg-[#1F2937]" />
-      <p className="text-[#9CA3AF] text-center md:text-base text-xs">© 2025 InvoiceKu. All rights reserved.</p>
+      <p className="text-[#9CA3AF] text-center md:text-base text-xs">
+        © 2025 InvoiceKu. All rights reserved.
+      </p>
     </footer>
   );
 };

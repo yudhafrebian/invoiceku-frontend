@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { invoiceSchema } from "@/schemas/invoice-schema";
 import { apiCall } from "@/utils/apiHelper";
 import { Field, FieldArray, Form, Formik, FormikProps } from "formik";
-import { Plus, Trash2Icon } from "lucide-react";
+import { Loader2, Plus, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,12 +19,12 @@ import { toast } from "sonner";
 interface IFormValue {
   client_id: string;
   invoice_number: string;
-  start_date: Date;
-  due_date: Date;
+  start_date: string;
+  due_date: string;
   notes: string;
   total: number;
   payment_method: string;
-  template:string
+  template: string;
   invoice_items: {
     product_id: string;
     name_snapshot: string;
@@ -38,25 +38,47 @@ interface IFormValue {
 const CreateInvoiceForm = () => {
   const router = useRouter();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const formatRupiah = (value: string) => {
+    const numeric = value.replace(/[^\d]/g, "");
+    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
 
   const onSubmit = async (values: IFormValue) => {
+    setLoading(true);
+    const toastID = toast.loading("Creating invoice...");
     try {
+      const cleanedItems = values.invoice_items.map((item) => ({
+        ...item,
+        price_snapshot: Number(item.price_snapshot),
+        total: item.price_snapshot * item.quantity,
+      }));
+
       const token = window.localStorage.getItem("token");
-      const response = await apiCall.post("invoice/create-invoice", values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await apiCall.post(
+        "invoice/create-invoice",
+        { ...values, invoice_items: cleanedItems },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast.success("Invoice Created", {
+        id: toastID,
         description: response.data.message,
       });
       router.replace("/dashboard/invoices");
     } catch (error: any) {
       console.log(error);
       toast.error("Failed to create invoice", {
-        description: error.response.data.error,
+        id: toastID,
+        description: error.response.data.message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,12 +88,12 @@ const CreateInvoiceForm = () => {
         invoice_items: [],
         client_id: "",
         invoice_number: "",
-        start_date: new Date(),
-        due_date: new Date(),
+        start_date: "",
+        due_date: "",
         notes: "",
         total: 0,
         payment_method: "",
-        template: "Modern"
+        template: "Modern",
       }}
       validationSchema={invoiceSchema}
       onSubmit={(values) => {
@@ -88,6 +110,7 @@ const CreateInvoiceForm = () => {
           handleBlur,
           setFieldValue,
         } = props;
+        console.log(errors);
 
         useEffect(() => {
           const totalAmount = values.invoice_items.reduce(
@@ -101,7 +124,7 @@ const CreateInvoiceForm = () => {
           const generatePreview = async () => {
             try {
               const token = window.localStorage.getItem("token");
-              
+
               const response = await apiCall.post(
                 "invoice/preview",
                 {
@@ -131,7 +154,7 @@ const CreateInvoiceForm = () => {
             if (values.client_id && values.invoice_items.length > 0) {
               generatePreview();
             }
-          }, 1000); 
+          }, 1000);
           return () => clearTimeout(timeout);
         }, [
           values.client_id,
@@ -141,7 +164,7 @@ const CreateInvoiceForm = () => {
           values.due_date,
           values.notes,
           values.payment_method,
-          values.template
+          values.template,
         ]);
 
         return (
@@ -160,9 +183,10 @@ const CreateInvoiceForm = () => {
                     <Input
                       type="date"
                       name="start_date"
-                      onChange={(e) =>
-                        setFieldValue("start_date", new Date(e.target.value))
-                      }
+                      onChange={(e) => {
+                        setFieldValue("start_date", e.target.value);
+                        props.setFieldTouched("start_date", true, true);
+                      }}
                       onBlur={handleBlur}
                     />
                     {touched.start_date && errors.start_date && (
@@ -176,9 +200,10 @@ const CreateInvoiceForm = () => {
                     <Input
                       type="date"
                       name="due_date"
-                      onChange={(e) =>
-                        setFieldValue("due_date", new Date(e.target.value))
-                      }
+                      onChange={(e) => {
+                        setFieldValue("due_date", e.target.value);
+                        props.setFieldTouched("due_date", true, true);
+                      }}
                       onBlur={handleBlur}
                     />
                     {touched.due_date && errors.due_date && (
@@ -248,6 +273,19 @@ const CreateInvoiceForm = () => {
                                   name={`invoice_items.${index}.price_snapshot`}
                                   type="number"
                                   className="w-full border p-1 text-right"
+                                  value={formatRupiah(
+                                    item.price_snapshot.toString()
+                                  )}
+                                  onChange={(e: any) => {
+                                    const raw = e.target.value.replace(
+                                      /[^\d]/g,
+                                      ""
+                                    );
+                                    setFieldValue(
+                                      `invoice_items.${index}.price_snapshot`,
+                                      Number(raw)
+                                    );
+                                  }}
                                 />
                               </td>
                               <td className="p-2 border text-right">
@@ -343,7 +381,13 @@ const CreateInvoiceForm = () => {
                   </div>
                 </div>
                 <div className="flex gap-4 justify-end">
-                  <Button type="submit">Save Invoice</Button>
+                  {loading ? (
+                    <Button type="button" disabled>
+                      <Loader2 className="mr-2 animate-spin" /> Saving ...
+                    </Button>
+                  ) : (
+                    <Button type="submit">Save Invoice</Button>
+                  )}
                   <Link href="/dashboard/invoices">
                     <Button variant={"destructive"} type="button">
                       Cancel

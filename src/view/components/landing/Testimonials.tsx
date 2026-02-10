@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const Testimonials = () => {
   return (
-    <div className="p-8 md:p-20">
+    <div className="p-8 md:p-20 bg-white dark:bg-background">
       <div>
         <h2 className="text-3xl md:text-4xl font-bold text-center">
           What our Users say
@@ -25,8 +25,8 @@ const Testimonials = () => {
             </p>
             <Separator />
             <div className="flex items-center gap-4">
-              <Avatar className="w-12 h-12">
-                <AvatarImage src="https://images.unsplash.com/photo-1584308972272-9e4e7685e80f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fGZhY2V8ZW58MHwyfDB8fHww" />
+              <Avatar className="w-12 h-12" >
+                <AvatarImage alt="Sarah Smith" src="https://images.unsplash.com/photo-1584308972272-9e4e7685e80f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fGZhY2V8ZW58MHwyfDB8fHww" />
               </Avatar>
               <div className="flex flex-col">
                 <p className="font-semibold">Sarah Smith</p>
@@ -44,7 +44,7 @@ const Testimonials = () => {
             <Separator />
             <div className="flex items-center gap-4">
               <Avatar className="w-12 h-12">
-                <AvatarImage src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGZhY2V8ZW58MHwyfDB8fHww" />
+                <AvatarImage alt="Mike Johnson" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGZhY2V8ZW58MHwyfDB8fHww" />
               </Avatar>
               <div className="flex flex-col">
                 <p className="font-semibold">Mike Johnson</p>
@@ -61,7 +61,7 @@ const Testimonials = () => {
             <Separator />
             <div className="flex items-center gap-4">
               <Avatar className="w-12 h-12">
-                <AvatarImage src="https://images.unsplash.com/photo-1620075225255-8c2051b6c015?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAyfHxmYWNlfGVufDB8MnwwfHx8MA%3D%3D" />
+                <AvatarImage alt="Emma Davis" src="https://images.unsplash.com/photo-1620075225255-8c2051b6c015?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAyfHxmYWNlfGVufDB8MnwwfHx8MA%3D%3D" />
               </Avatar>
               <div className="flex flex-col">
                 <p className="font-semibold">Emma Davis</p>

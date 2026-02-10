@@ -36,10 +36,17 @@ import TypeFilter from "@/components/filter/TypeFilter";
 import UnitFilter from "@/components/filter/UnitFilter";
 import ProductSorter from "@/components/sorter/ProductSorter";
 import { Badge } from "@/components/ui/badge";
+import { useAppSelector } from "@/app/hook";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Products = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const user = useAppSelector((state) => state.authState);
 
   const [open, setOpen] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -117,11 +124,28 @@ const Products = () => {
       </div>
       <div className="flex justify-end">
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button type="button">
-              Add Product or Service <Plus />
-            </Button>
-          </DialogTrigger>
+          {user.is_verified ? (
+            <DialogTrigger asChild>
+              <Button type="button">
+                Add Product or Service <Plus />
+              </Button>
+            </DialogTrigger>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="inline-block">
+                  <DialogTrigger asChild>
+                    <Button disabled type="button">
+                      Add New Client <Plus />
+                    </Button>
+                  </DialogTrigger>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Please verify your email first</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Product or Service</DialogTitle>

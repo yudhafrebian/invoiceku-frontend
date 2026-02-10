@@ -28,12 +28,19 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useAppSelector } from "@/app/hook";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface IInvoiceProps {}
 
 const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const user = useAppSelector((state) => state.authState);
 
   const [data, setData] = useState<any[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -54,9 +61,7 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [selectedPayment, setSelectedPayment] = useState(payment);
   const [selectedSort, setSelectedSort] = useState(sort);
 
-  const activeFiltersCount = [status, payment].filter(
-    Boolean
-  ).length;
+  const activeFiltersCount = [status, payment].filter(Boolean).length;
 
   const updateQuery = (key: string, value: string | number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -129,9 +134,24 @@ const Invoices: React.FunctionComponent<IInvoiceProps> = (props) => {
         </p>
       </div>
       <div className="flex justify-end">
-        <Link href={"/dashboard/invoices/create-invoice"}>
-          <Button type="button">Create Invoice</Button>
-        </Link>
+        {user.is_verified ? (
+          <Link href={"/dashboard/invoices/create-invoice"}>
+            <Button type="button">Create Invoice</Button>
+          </Link>
+        ) : (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="inline-block">
+                <Button disabled type="button">
+                  Create Invoice
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Please verify your account first</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
       </div>
       <div className="flex flex-col md:flex-row gap-4 mb-4 border rounded-lg p-4">
         <div className="flex gap-4 md:w-1/3">

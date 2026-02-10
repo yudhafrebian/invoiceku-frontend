@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { productSchema } from "@/schemas/product-schema";
 import { apiCall } from "@/utils/apiHelper";
 import { Formik, Form, FormikProps } from "formik";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface IFormValue {
@@ -19,37 +18,51 @@ interface IFormValue {
 }
 
 interface IAddProductFormProps {
-    onClose: () => void
-    onSuccess?: () => void
+  onClose: () => void;
+  onSuccess?: () => void;
 }
 
-const AddProductForm: React.FunctionComponent<IAddProductFormProps> = ({onClose, onSuccess}) => {
-    const router = useRouter();
-    const addProduct = async (values: IFormValue) => {
-        try {
-            const token = window.localStorage.getItem("token");
-            const response = await apiCall.post("/product/create-product", {
-                name: values.name,
-                description: values.description,
-                price: values.price,
-                type: values.type,
-                unit: values.unit
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+const AddProductForm: React.FunctionComponent<IAddProductFormProps> = ({
+  onClose,
+  onSuccess,
+}) => {
 
-            toast.success("Product Added", {
-                description: response.data.message
-            })
+  const formatRupiah = (value: string) => {
+    const numeric = value.replace(/[^\d]/g, "");
+    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+  
 
-            if(onSuccess) onSuccess();
-            onClose();
-        } catch (error) {
-            console.log(error)
+  const addProduct = async (values: IFormValue) => {
+    try {
+      const cleanPrice = values.price.replace(/\./g, "");
+      const token = window.localStorage.getItem("token");
+      const response = await apiCall.post(
+        "/product/create-product",
+        {
+          name: values.name,
+          description: values.description,
+          price: Number(cleanPrice),
+          type: values.type,
+          unit: values.unit,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+
+      toast.success("Product Added", {
+        description: response.data.message,
+      });
+
+      if (onSuccess) onSuccess();
+      onClose();
+    } catch (error) {
+      console.log(error);
     }
+  };
   return (
     <Formik
       initialValues={{
@@ -60,7 +73,7 @@ const AddProductForm: React.FunctionComponent<IAddProductFormProps> = ({onClose,
         unit: "",
       }}
       validationSchema={productSchema}
-      onSubmit={(values: IFormValue, {resetForm}) => {
+      onSubmit={(values: IFormValue, { resetForm }) => {
         addProduct(values);
         resetForm();
       }}
@@ -111,16 +124,27 @@ const AddProductForm: React.FunctionComponent<IAddProductFormProps> = ({onClose,
             <div className="flex flex-col gap-2">
               <Label htmlFor="price">Price</Label>
               <div>
-                <Input
-                  id="price"
-                  name="price"
-                  type="number"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  className={
-                    errors.price && touched.price ? "border-red-500" : ""
-                  }
-                />
+                <div className="flex items-center gap-x-2">
+                  <span className="px-3 py-2 border border-input rounded-md bg-muted text-sm text-muted-foreground">
+                    IDR
+                  </span>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="text"
+                    value={props.values.price}
+                    onBlur={handleBlur}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      const formatted = formatRupiah(raw);
+                      props.setFieldValue("price", formatted);
+                    }}
+                    className={
+                      errors.price && touched.price ? "border-red-500" : ""
+                    }
+                  />
+                </div>
+
                 {errors.price && touched.price && (
                   <p className="text-xs text-red-500 mt-1">{errors.price}</p>
                 )}

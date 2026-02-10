@@ -30,11 +30,17 @@ import {
 } from "@/components/ui/pagination";
 import RecurringTypeFilter from "@/components/filter/RecurringTypeFilter";
 import RecurringInvoiceSorter from "@/components/sorter/RecurringInvoiceSorter";
-
+import { useAppSelector } from "@/app/hook";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const RecurringInvoice = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const user = useAppSelector((state) => state.authState);
 
   const [data, setData] = useState<any[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -57,9 +63,7 @@ const RecurringInvoice = () => {
   const [selectedSort, setSelectedSort] = useState<string>(sort);
   const [selectedType, setSelectedType] = useState<string>(type);
 
-  const activeFiltersCount = [status, payment, type].filter(
-    Boolean
-  ).length;
+  const activeFiltersCount = [status, payment, type].filter(Boolean).length;
 
   const updateQuery = (key: string, value: string | number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -91,26 +95,28 @@ const RecurringInvoice = () => {
           status,
           payment,
           sort,
-          type
+          type,
         },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const formattedData = response.data.data.recurringInvoice.map((invoice: any) => ({
-        id: invoice.id,
-        client: invoice.clients?.name || "Unknown",
-        invoice_number: invoice.invoice_number,
-        start_date: new Date(invoice.start_date).toLocaleDateString(),
-        total: invoice.total,
-        payment_method: invoice.payment_method,
-        recurrence_type: invoice.recurrence_type,
-        recurrence_interval: invoice.recurrence_interval,
-        duration: invoice.duration,
-        due_in_days: invoice.due_in_days
-      }));
-
+      const formattedData = response.data.data.recurringInvoice.map(
+        (invoice: any) => ({
+          id: invoice.id,
+          client: invoice.clients?.name || "Unknown",
+          invoice_number: invoice.invoice_number,
+          start_date: new Date(invoice.start_date).toLocaleDateString(),
+          total: invoice.total,
+          payment_method: invoice.payment_method,
+          recurrence_type: invoice.recurrence_type,
+          recurrence_interval: invoice.recurrence_interval,
+          occurrences_done: invoice.occurrences_done,
+          duration: invoice.duration,
+          due_in_days: invoice.due_in_days,
+        })
+      );
 
       setPagination(response.data.data.pagination);
       setData(formattedData);
@@ -137,9 +143,24 @@ const RecurringInvoice = () => {
         </p>
       </div>
       <div className="flex justify-end">
-        <Link href={"/dashboard/recurring-invoices/create-recurring-invoice"}>
-          <Button type="button">Create Recurring Invoice</Button>
-        </Link>
+        {user.is_verified ? (
+          <Link href={"/dashboard/recurring-invoices/create-recurring-invoice"}>
+            <Button type="button">Create Recurring Invoice</Button>
+          </Link>
+        ) : (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="inline-block">
+                <Button disabled type="button">
+                  Create Recurring Invoice
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Please verify your account first</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
       </div>
       <div className="flex flex-col md:flex-row gap-4 mb-4 border rounded-lg p-4">
         <div className="flex gap-4 md:w-1/3">

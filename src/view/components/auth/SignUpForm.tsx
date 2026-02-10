@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowRightCircle, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, ArrowRightCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { apiCall } from "@/utils/apiHelper";
 import { toast } from "sonner";
@@ -31,17 +31,19 @@ interface IFormValue {
 }
 
 const SignUpForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const onSubmit = async (values: IFormValue) => {
     try {
+      setLoading(true);
       const response = await apiCall.post("/auth/signup", {
         first_name: values.first_name,
         last_name: values.last_name,
         email: values.email,
-        phone: values.phone,
+        phone: String(values.phone),
         password: values.password,
       });
 
@@ -50,8 +52,13 @@ const SignUpForm = () => {
       });
 
       router.push("/auth/sign-in");
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
+      toast.error("Registration Failed", {
+        description: error.response.data.message,
+      })
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,12 +135,17 @@ const SignUpForm = () => {
                 <p className="text-xs text-red-500 mt-1">{errors.email}</p>
               )}
             </div>
-            <Input
-              name="phone"
-              type="number"
-              placeholder="Phone"
-              onChange={handleChange}
-            />
+            <div className="flex items-center gap-x-2">
+              <span className="px-3 py-2 border border-input rounded-md bg-muted text-sm text-muted-foreground">
+                +62
+              </span>
+              <Input
+                id="phone"
+                name="phone"
+                type="number"
+                onChange={handleChange}
+              />
+            </div>
             <div>
               <div className="flex gap-2">
                 <Input
@@ -184,7 +196,12 @@ const SignUpForm = () => {
                 </p>
               )}
             </div>
-            <Button type="submit">Sign Up</Button>
+            {loading ? (
+              <Button type="button" disabled><Loader2 className="mr-2 animate-spin" /> Submitting ...</Button>
+            ) : (
+              <Button type="submit">Sign Up</Button>
+            )
+            }
           </Form>
         );
       }}

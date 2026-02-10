@@ -17,7 +17,7 @@ const SignUpCarousel = () => {
       <CarouselContent>
         <CarouselItem className="flex flex-col justify-center items-center">
           <Image
-            src={"../invoice.svg"}
+            src={"/Invoice.svg"}
             width={400}
             height={400}
             alt=""
@@ -28,14 +28,14 @@ const SignUpCarousel = () => {
           </div>
         </CarouselItem>
         <CarouselItem className="flex flex-col justify-center items-center">
-          <Image src={"../payment.svg"} width={400} height={400} alt="" />
+          <Image src={"/payment.svg"} width={400} height={400} alt="" />
           <div className="text-2xl font-semibold text-center">
             <p>Easy Payment</p>
             <p>Pay Anywhere With Ease</p>
           </div>
         </CarouselItem>
         <CarouselItem className="flex flex-col justify-center items-center">
-          <Image src={"../secure.svg"} width={400} height={400} alt="" />
+          <Image src={"/secure.svg"} width={400} height={400} alt="" />
           <div className="text-2xl font-semibold text-center">
             <p>100% Secure</p>
             <p>Your Data Is Safe With Us</p>
